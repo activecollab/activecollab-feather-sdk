@@ -29,6 +29,10 @@ This example will contact activeCollab and ask for application and user info. Re
 
 # Making API Calls
 
+Listing all tasks in project #65 is easy. Just call:
+
+    API::call('projects/65/tasks');
+
 This example shows how you can create a new task in a selected project:
 
     API::call('projects/65/tasks/add', null, array(
