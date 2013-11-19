@@ -1,6 +1,6 @@
 <?php
 
-  require_once 'ActiveCollab/inc.php';
+  require_once 'ActiveCollab/autoload.php';
 
   use \ActiveCollab\Client as API;
   use \ActiveCollab\Connectors\Curl as CurlConnector;
