@@ -16,6 +16,7 @@ Now that you have API token and URL, you can test out this simple example:
     
       use \ActiveCollab\Client as API;
       use \ActiveCollab\Connectors\Curl as CurlConnector;
+      use \ActiveCollab\Exceptions\AppException;
     
       API::setUrl('MY-API-URL');
       API::setKey('MY-API-TOKEN');
@@ -35,13 +36,18 @@ Listing all tasks in project #65 is easy. Just call:
 
 This example shows how you can create a new task in a selected project:
 
-    API::call('projects/65/tasks/add', null, array(
-      'task[name]' => 'This is a task name',
-      'task[assignee_id]' => 48,
-      'task[other_assignees]' => array(3, 1),
-    ), array(
-      '/attach.jpeg'
-    ));
+    try {
+      API::call('projects/65/tasks/add', null, array(
+        'task[name]' => 'This is a task name',
+        'task[assignee_id]' => 48,
+        'task[other_assignees]' => array(3, 1),
+      ), array(
+        '/attach.jpeg'
+      ));
+    } catch(AppException $e) {
+      print $e->getMessage() . '<br><br>';
+      // var_dump($e->getServerResponse()); (need more info?)
+    } // try
 
 ``call()`` method can take four parameters:
 
