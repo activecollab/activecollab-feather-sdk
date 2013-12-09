@@ -4,6 +4,7 @@
 
   use ActiveCollab\Client;
   use ActiveCollab\Connector;
+  use ActiveCollab\Exceptions\AppException;
   use ActiveCollab\Exceptions\CallFailed;
 
   /**
@@ -73,6 +74,7 @@
      * @param resource $http
      * @return string
      * @throws CallFailed
+     * @throws AppException
      */
     private function execute(&$http) {
       $result = curl_exec($http);
@@ -89,11 +91,22 @@
 
         curl_close($http);
 
-        if($status === 200) {
-          return $result;
-        } else {
-          throw new CallFailed($status, $result);
-        } // if
+        switch($status) {
+          case 200:
+            return $result;
+          case 400:
+          case 401:
+          case 403:
+          case 404:
+          case 409:
+          case 500:
+          case 503:
+          if(is_string($result) && substr($result, 0, 1) === '{') {
+            throw new AppException($status, $result); // Known application exception
+          } // if
+        } // switch
+
+        throw new CallFailed($status, $result); // Unknown exception
       } // if
     } // execute
 
