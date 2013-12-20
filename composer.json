@@ -1,0 +1,22 @@
+{
+    "name": "activecollab/activecollab-sdk",
+    "type": "library",
+    "description": "This is a simple PHP library that makes communication with activeCollab API easy",
+    "keywords": ["activecollab"],
+    "homepage": "https://github.com/activecollab/activecollab-sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ilija Studen",
+            "email": "ilija.studen@gmail.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+      "psr-0": {
+        "ActiveCollab": "ActiveCollab"
+      }
+    }
+}
