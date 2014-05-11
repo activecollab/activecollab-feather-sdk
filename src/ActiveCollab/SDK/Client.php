@@ -215,7 +215,7 @@
      * @return Response
      */
     static function get($path) {
-      return self::getConnector()->get($path, self::prepareHeaders());
+      return self::getConnector()->get(self::prepareUrl($path), self::prepareHeaders());
     } // get
 
     /**
@@ -227,7 +227,7 @@
      * @return Response
      */
     static function post($path, $params = null, $attachments = null) {
-      return self::getConnector()->post($path, self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
+      return self::getConnector()->post(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
     } // post
 
     /**
@@ -239,7 +239,7 @@
      * @return Response
      */
     static function put($path, $params = null, $attachments = null) {
-      return self::getConnector()->put($path, self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
+      return self::getConnector()->put(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
     } // put
 
     /**
@@ -250,7 +250,7 @@
      * @return Response
      */
     static function delete($path, $params = null) {
-      return self::getConnector()->delete($path, self::prepareHeaders(), self::prepareParams($params));
+      return self::getConnector()->delete(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params));
     } // delete
 
     /**
@@ -261,6 +261,21 @@
     static private function prepareHeaders() {
       return [ 'X-Angie-AuthApiToken: ' . self::getKey() ];
     } // prepareHeaders
+
+    /**
+     * Prepare URL from the given path
+     *
+     * @param string $path
+     * @return string
+     */
+    static private function prepareUrl($path) {
+      $bits = parse_url($path);
+
+      $path_info = isset($bits['path']) && $bits['path'] ? $bits['path'] : '/';
+      $query = isset($bits['query']) && $bits['query'] ? '&' . $bits['query'] : '';
+
+      return self::getUrl() . '?path_info=' . $path_info . $query;
+    } // preparePath
 
     /**
      * Prepare params
