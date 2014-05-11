@@ -17,7 +17,7 @@
      *
      * @param string $url
      * @param array|null $headers
-     * @return string
+     * @return Response
      */
     function get($url, $headers = null) {
       return $this->execute($http = $this->getHandle($url, $headers));
@@ -30,7 +30,7 @@
      * @param array|null $headers
      * @param array $post_data
      * @param array $files
-     * @return mixed
+     * @return Response
      */
     function post($url, $headers = null, $post_data = null, $files = null) {
       $http = $this->getHandle($url, $headers);
@@ -58,7 +58,7 @@
      * @param array|null $headers
      * @param array $put_data
      * @param array $files
-     * @return mixed
+     * @return Response
      */
     function put($url, $headers = null, $put_data = null, $files = null) {
       $http = $this->getHandle($url, $headers);
@@ -85,7 +85,7 @@
      * @param string $url
      * @param array|null $headers
      * @param array $delete_data
-     * @return mixed
+     * @return Response
      */
     function delete($url, $headers = null, $delete_data = null) {
       $http = $this->getHandle($url, $headers);
@@ -108,6 +108,7 @@
 
       curl_setopt($http, CURLOPT_USERAGENT, Client::getUserAgent());
       curl_setopt($http, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($http, CURLINFO_HEADER_OUT, true);
       curl_setopt($http, CURLOPT_URL, $url);
 
       if(is_array($headers) && count($headers)) {

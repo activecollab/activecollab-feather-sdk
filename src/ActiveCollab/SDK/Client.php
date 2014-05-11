@@ -4,6 +4,7 @@
 
   use ActiveCollab\SDK\Exceptions\WrapperNotInitialized;
   use ActiveCollab\SDK\Exceptions\FileNotReadable;
+  use ActiveCollab\SDK\Response;
 
   /**
    * activeCollab API client
@@ -41,7 +42,7 @@
      */
     static function info($property = false) {
       if(self::$info_response === false) {
-        self::$info_response = self::get('info');
+        self::$info_response = self::get('info')->getJson();
       } // if
 
       if($property) {
@@ -211,7 +212,7 @@
      * Send a get request
      *
      * @param string $path
-     * @return mixed
+     * @return Response
      */
     static function get($path) {
       return self::$connector->get($path, self::prepareHeaders());
@@ -223,7 +224,7 @@
      * @param string $path
      * @param array|null $params
      * @param array|null $attachments
-     * @return mixed
+     * @return Response
      */
     static function post($path, $params = null, $attachments = null) {
       return self::$connector->post($path, self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
@@ -235,7 +236,7 @@
      * @param $path
      * @param array|null $params
      * @param array|null $attachments
-     * @return mixed
+     * @return Response
      */
     static function put($path, $params = null, $attachments = null) {
       return self::$connector->put($path, self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
@@ -246,7 +247,7 @@
      *
      * @param $path
      * @param array|null $params
-     * @return mixed
+     * @return Response
      */
     static function delete($path, $params = null) {
       return self::$connector->delete($path, self::prepareHeaders(), self::prepareParams($params));
