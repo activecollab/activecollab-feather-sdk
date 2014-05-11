@@ -15,8 +15,6 @@
 
     },
     "autoload": {
-      "psr-0": {
-        "ActiveCollab": "ActiveCollab"
-      }
+      "psr-0": { "ActiveCollab\\SDK" : "src" }
     }
 }
