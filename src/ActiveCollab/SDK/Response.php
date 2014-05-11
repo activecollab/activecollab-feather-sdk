@@ -112,9 +112,10 @@
      * Make all info elements available via getElementName() magic methods
      *
      * @param string $name
+     * @param array $arguments
      * @return mixed
      */
-    function __call($name) {
+    function __call($name, $arguments) {
       if(substr($name, 0, 3) == 'get') {
         $bit = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', substr($name, 3)));
 
