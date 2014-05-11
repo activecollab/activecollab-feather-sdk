@@ -80,7 +80,7 @@
      */
     function getJson() {
       if(empty($this->json_loaded)) {
-        if($this->getBody() && $this->getContentType() === 'application/json') {
+        if($this->getBody() && strpos($this->getContentType(), 'application/json') !== false) {
           $this->json = json_decode($this->getBody(), true);
         } // if
 
