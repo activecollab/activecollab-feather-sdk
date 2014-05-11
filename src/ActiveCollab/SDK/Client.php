@@ -11,7 +11,7 @@
   final class Client {
 
     // API wrapper version
-    const VERSION = '0.9';
+    const VERSION = '5.0.0';
 
     /**
      * Return user agent string
@@ -41,7 +41,7 @@
      */
     static function info($property = false) {
       if(self::$info_response === false) {
-        self::$info_response = self::call('info');
+        self::$info_response = self::get('info');
       } // if
 
       if($property) {
@@ -113,22 +113,17 @@
     static private $connector;
 
     /**
-     * Return new connector instace
+     * Return connector instance
      *
      * @return Connector
      */
-    function getConnector() {
+    static function &getConnector() {
+      if(empty(self::$connector)) {
+        self::$connector = new Connector();
+      } // if
+
       return self::$connector;
     } // getConnector
-
-    /**
-     * Set connector instance
-     *
-     * @param Connector $connector
-     */
-    static function setConnector(Connector $connector) {
-      self::$connector = $connector;
-    } // setConnector
 
     /**
      * Prepare and execute API command
@@ -211,5 +206,118 @@
 
       return json_decode($response, true);
     } // call
+
+    /**
+     * Send a get request
+     *
+     * @param string $path
+     * @return mixed
+     */
+    static function get($path) {
+      return self::$connector->get($path, self::prepareHeaders());
+    } // get
+
+    /**
+     * Send a POST request
+     *
+     * @param string $path
+     * @param array|null $params
+     * @param array|null $attachments
+     * @return mixed
+     */
+    static function post($path, $params = null, $attachments = null) {
+      return self::$connector->post($path, self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
+    } // post
+
+    /**
+     * Send a PUT request
+     *
+     * @param $path
+     * @param array|null $params
+     * @param array|null $attachments
+     * @return mixed
+     */
+    static function put($path, $params = null, $attachments = null) {
+      return self::$connector->put($path, self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
+    } // put
+
+    /**
+     * Send a delete command
+     *
+     * @param $path
+     * @param array|null $params
+     * @return mixed
+     */
+    static function delete($path, $params = null) {
+      return self::$connector->delete($path, self::prepareHeaders(), self::prepareParams($params));
+    } // delete
+
+    /**
+     * Prepare headers
+     *
+     * @return array
+     */
+    static private function prepareHeaders() {
+      return [ 'X-Angie-AuthApiToken: ' . self::getKey() ];
+    } // prepareHeaders
+
+    /**
+     * Prepare params
+     *
+     * @param array|null $params
+     * @return array
+     */
+    static private function prepareParams($params) {
+      if(empty($params)) {
+        $params = [];
+      } else {
+        foreach($params as $param => $param_value) {
+          if(is_array($param_value)) {
+            foreach($param_value as $k => $v) {
+              $post_params["{$param}[{$k}]"] = $v;
+            } // foreach
+
+            unset($params[$param]);
+          } // if
+        } // foreach
+      } // if
+
+      return $params;
+    } // prepareParams
+
+    /**
+     * Prepare attachments for request
+     *
+     * @param array|null $attachments
+     * @return array|null
+     * @throws Exceptions\FileNotReadable
+     */
+    static private function prepareAttachments($attachments = null) {
+      $file_params = [];
+
+      if($attachments) {
+        $counter = 1;
+
+        foreach($attachments as $attachment) {
+          if(is_readable($attachment)) {
+            $file_params['attachment_' . $counter++] = $attachment;
+          } else {
+            throw new FileNotReadable($attachment);
+          } // if
+        } // foreach
+      } // if
+
+      return $file_params;
+    } // prepareAttachments
+
+    /**
+     * Return decoded response
+     *
+     * @param $response
+     * @return mixed
+     */
+    static private function prepareResponse($response) {
+      return json_decode($response);
+    } // prepareResponse
 
   }

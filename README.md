@@ -15,12 +15,10 @@ Now that you have API token and URL, you can test out this simple example:
       require_once 'ActiveCollab/autoload.php';
     
       use \ActiveCollab\Client as API;
-      use \ActiveCollab\Connectors\Curl as CurlConnector;
       use \ActiveCollab\Exceptions\AppException;
     
       API::setUrl('MY-API-URL');
       API::setKey('MY-API-TOKEN');
-      API::setConnector(new CurlConnector);
     
       print '<pre>';
       print_r(API::info());
