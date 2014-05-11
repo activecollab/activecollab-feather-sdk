@@ -8,6 +8,6 @@
     $parts = explode('\\', $class);
 
     if(array_shift($parts) == 'ActiveCollab' && array_shift($parts) == 'SDK') {
-      require_once __DIR__ . '/SDK/' . implode('/', $parts) . '.php';
+      require_once __DIR__ . '/' . implode('/', $parts) . '.php';
     } //
   });
