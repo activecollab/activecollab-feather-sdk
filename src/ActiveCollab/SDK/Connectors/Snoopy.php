@@ -1,10 +1,10 @@
 <?php
 
-  namespace ActiveCollab\Connectors;
+  namespace ActiveCollab\SDK\Connectors;
 
-  use ActiveCollab\Client;
-  use ActiveCollab\Connector;
-  use ActiveCollab\Exceptions\CallFailed;
+  use ActiveCollab\SDK\Client;
+  use ActiveCollab\SDK\Connector;
+  use ActiveCollab\SDK\Exceptions\CallFailed;
 
   /**
    * Snoopy connector

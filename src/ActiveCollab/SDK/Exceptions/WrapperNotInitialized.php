@@ -1,8 +1,8 @@
 <?php
 
-  namespace ActiveCollab\Exceptions;
+  namespace ActiveCollab\SDK\Exceptions;
 
-  use ActiveCollab\Exception;
+  use ActiveCollab\SDK\Exception;
 
   /**
    * API not initialized exception

@@ -1,9 +1,9 @@
 <?php
 
-  namespace ActiveCollab;
+  namespace ActiveCollab\SDK;
 
-  use ActiveCollab\Exceptions\WrapperNotInitialized;
-  use ActiveCollab\Exceptions\FileNotReadable;
+  use ActiveCollab\SDK\Exceptions\WrapperNotInitialized;
+  use ActiveCollab\SDK\Exceptions\FileNotReadable;
 
   /**
    * activeCollab API client
@@ -108,7 +108,7 @@
     /**
      * Connector instance
      *
-     * @var \ActiveCollab\Connector
+     * @var \ActiveCollab\SDK\Connector
      */
     static private $connector;
 

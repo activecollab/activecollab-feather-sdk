@@ -1,6 +1,6 @@
 <?php
 
-  namespace ActiveCollab;
+  namespace ActiveCollab\SDK;
 
   /**
    * Base activeCollab exception
