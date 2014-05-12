@@ -71,7 +71,20 @@
      *
      * @var mixed
      */
-    private $json_loaded = false, $json = null;
+    private $is_json = null, $json_loaded = false, $json = null;
+
+    /**
+     * Return true if response is JSON
+     *
+     * @return boolean
+     */
+    function isJson() {
+      if($this->is_json === null) {
+        $this->is_json = strpos($this->getContentType(), 'application/json') !== false;
+      } // if
+
+      return $this->is_json;
+    } // isJson
 
     /**
      * Return response body as JSON (when applicable)
@@ -80,7 +93,7 @@
      */
     function getJson() {
       if(empty($this->json_loaded)) {
-        if($this->getBody() && strpos($this->getContentType(), 'application/json') !== false) {
+        if($this->getBody() && $this->isJson()) {
           $this->json = json_decode($this->getBody(), true);
         } // if
 
