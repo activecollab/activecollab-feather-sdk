@@ -290,7 +290,7 @@
         foreach($params as $param => $param_value) {
           if(is_array($param_value)) {
             foreach($param_value as $k => $v) {
-              $post_params["{$param}[{$k}]"] = $v;
+              $params["{$param}[{$k}]"] = $v;
             } // foreach
 
             unset($params[$param]);
