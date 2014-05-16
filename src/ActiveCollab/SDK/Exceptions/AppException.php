@@ -22,11 +22,13 @@
     /**
      * Construct the new exception instance
      *
-     * @param integer $code
+     * @param integer $http_code
      * @param string $server_response
      * @param string $message
      */
-    function __construct($code, $server_response = null, $message = null) {
+    function __construct($http_code, $server_response = null, $message = null) {
+      $this->http_code = $http_code;
+
       if($server_response && substr($server_response, 0, 1) === '{') {
         $this->server_response = json_decode($server_response, true);
       } else {
@@ -34,7 +36,7 @@
       } // if
 
       if($message === null) {
-        switch($code) {
+        switch($http_code) {
           case self::BAD_REQUEST:
             $message = 'Bad Request';
             break;
@@ -72,6 +74,20 @@
 
       parent::__construct($message);
     } // __construct
+
+    /**
+     * @var integer
+     */
+    private $http_code;
+
+    /**
+     * Return response code
+     *
+     * @return integer
+     */
+    function getHttpCode() {
+      return $this->http_code;
+    } // getHttpCode
 
     /**
      * Remember server response
