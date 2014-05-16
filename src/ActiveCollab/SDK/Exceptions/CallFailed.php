@@ -59,14 +59,16 @@
     /**
      * Construct the new exception instance
      *
-     * @param integer $code
+     * @param integer $http_code
      * @param string $server_response
      * @param string $message
      */
-    function __construct($code, $server_response = null, $message = null) {
+    function __construct($http_code, $server_response = null, $message = null) {
+      $this->http_code = $http_code;
+
       if(empty($message)) {
-        if(isset($this->http_codes[$code])) {
-          $message = 'HTTP error ' . $code . ': ' . $this->http_codes[$code];
+        if(isset($this->http_codes[$http_code])) {
+          $message = 'HTTP error ' . $http_code . ': ' . $this->http_codes[$http_code];
         } else {
           $message = 'Unknown HTTP error';
         } // if
@@ -74,5 +76,19 @@
 
       parent::__construct($message);
     } // __construct
+
+    /**
+     * @var integer
+     */
+    private $http_code;
+
+    /**
+     * Return response code
+     *
+     * @return integer
+     */
+    function getHttpCode() {
+      return $this->http_code;
+    } // getHttpCode
 
   }
