@@ -135,7 +135,7 @@
 
         curl_close($http);
 
-        throw new CallFailed($error_code, $raw_response, $error_message);
+        throw new CallFailed($error_code, $raw_response, null, $error_message);
       } else {
         $response = new Response($http, $raw_response);
 
@@ -152,11 +152,11 @@
           case 500:
           case 503:
             if(is_string($raw_response) && substr($raw_response, 0, 1) === '{') {
-              throw new AppException($response->getHttpCode(), $raw_response); // Known application exception
+              throw new AppException($response->getHttpCode(), $raw_response, $response->getTotalTime()); // Known application exception
             } // if
         } // switch
 
-        throw new CallFailed($response->getHttpCode(), $raw_response); // Unknown exception
+        throw new CallFailed($response->getHttpCode(), $raw_response, $response->getTotalTime()); // Unknown exception
       } // if
     } // execute
 
