@@ -24,10 +24,12 @@
      *
      * @param integer $http_code
      * @param string $server_response
+     * @param float|null $request_time
      * @param string $message
      */
-    function __construct($http_code, $server_response = null, $message = null) {
+    function __construct($http_code, $server_response = null, $request_time = null, $message = null) {
       $this->http_code = $http_code;
+      $this->request_time = $request_time;
 
       if($server_response && substr($server_response, 0, 1) === '{') {
         $this->server_response = json_decode($server_response, true);
@@ -104,5 +106,17 @@
     function getServerResponse() {
       return $this->server_response;
     } // getServerResponse
+
+    /**
+     * @var float|null
+     */
+    private $request_time;
+
+    /**
+     * Return total request time
+     */
+    function getRequestTime() {
+      return $this->request_time;
+    } // getRequestTime
 
   }
