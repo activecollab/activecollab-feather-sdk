@@ -35,18 +35,10 @@
     function post($url, $headers = null, $post_data = null, $files = null) {
       $http = $this->getHandle($url, $headers);
 
-//      if($files) {
-//        curl_setopt($http, CURLOPT_HTTPHEADER, [ 'Content-type: multipart/form-data' ]);
-//
-//        $counter = 1;
-//
-//        foreach($files as $file) {
-//          $post_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
-//        } // foreach
-//      } // if
-
       curl_setopt($http, CURLOPT_POST, 1);
-      curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
+      if($post_data) {
+        curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($post_data));
+      } // if
 
       return $this->execute($http);
     } // post
@@ -63,18 +55,10 @@
     function put($url, $headers = null, $put_data = null, $files = null) {
       $http = $this->getHandle($url, $headers);
 
-//      if($files) {
-//        curl_setopt($http, CURLOPT_HTTPHEADER, [ 'Content-type: multipart/form-data' ]);
-//
-//        $counter = 1;
-//
-//        foreach($files as $file) {
-//          $put_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
-//        } // foreach
-//      } // if
-
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'PUT');
-      curl_setopt($http, CURLOPT_POSTFIELDS, $put_data);
+      if($put_data) {
+        curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($put_data));
+      } // if
 
       return $this->execute($http);
     } // put
@@ -91,7 +75,9 @@
       $http = $this->getHandle($url, $headers);
 
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'DELETE');
-      curl_setopt($http, CURLOPT_POSTFIELDS, $delete_data);
+      if($delete_data) {
+        curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($delete_data));
+      } // if
 
       return $this->execute($http);
     } // delete
