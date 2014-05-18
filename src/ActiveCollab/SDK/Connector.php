@@ -35,15 +35,15 @@
     function post($url, $headers = null, $post_data = null, $files = null) {
       $http = $this->getHandle($url, $headers);
 
-      if($files) {
-        curl_setopt($http, CURLOPT_HTTPHEADER, [ 'Content-type: multipart/form-data' ]);
-
-        $counter = 1;
-
-        foreach($files as $file) {
-          $post_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
-        } // foreach
-      } // if
+//      if($files) {
+//        curl_setopt($http, CURLOPT_HTTPHEADER, [ 'Content-type: multipart/form-data' ]);
+//
+//        $counter = 1;
+//
+//        foreach($files as $file) {
+//          $post_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
+//        } // foreach
+//      } // if
 
       curl_setopt($http, CURLOPT_POST, 1);
       curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
@@ -63,15 +63,15 @@
     function put($url, $headers = null, $put_data = null, $files = null) {
       $http = $this->getHandle($url, $headers);
 
-      if($files) {
-        curl_setopt($http, CURLOPT_HTTPHEADER, [ 'Content-type: multipart/form-data' ]);
-
-        $counter = 1;
-
-        foreach($files as $file) {
-          $put_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
-        } // foreach
-      } // if
+//      if($files) {
+//        curl_setopt($http, CURLOPT_HTTPHEADER, [ 'Content-type: multipart/form-data' ]);
+//
+//        $counter = 1;
+//
+//        foreach($files as $file) {
+//          $put_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
+//        } // foreach
+//      } // if
 
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'PUT');
       curl_setopt($http, CURLOPT_POSTFIELDS, $put_data);
