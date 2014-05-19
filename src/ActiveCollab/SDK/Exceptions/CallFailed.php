@@ -66,6 +66,13 @@
      */
     function __construct($http_code, $server_response = null, $request_time = null, $message = null) {
       $this->http_code = $http_code;
+
+      if($server_response && substr($server_response, 0, 1) === '{') {
+        $this->server_response = json_decode($server_response, true);
+      } else {
+        $this->server_response = $server_response;
+      } // if
+
       $this->request_time = $request_time;
 
       if(empty($message)) {
@@ -92,6 +99,20 @@
     function getHttpCode() {
       return $this->http_code;
     } // getHttpCode
+
+    /**
+     * @var string
+     */
+    private $server_response;
+
+    /**
+     * Return server response
+     *
+     * @return integer
+     */
+    function getServerResponse() {
+      return $this->server_response;
+    } // getServerResponse
 
     /**
      * @var float|null
