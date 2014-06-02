@@ -33,12 +33,35 @@
      * @return Response
      */
     function post($url, $headers = null, $post_data = null, $files = null) {
+      if($files) {
+        if(empty($headers)) {
+          $headers = [];
+        }
+
+        $headers[] = 'Content-type: multipart/form-data';
+      }
+
       $http = $this->getHandle($url, $headers);
 
-      curl_setopt($http, CURLOPT_POST, 1);
-      if($post_data) {
-        curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($post_data));
-      } // if
+      if($files) {
+        if(empty($post_data)) {
+          $post_data = [];
+        }
+
+        $counter = 1;
+
+        foreach($files as $file) {
+          $post_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
+        }
+
+        curl_setopt($http, CURLOPT_POST, 1);
+        curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
+      } else {
+        if($post_data) {
+          curl_setopt($http, CURLOPT_POST, 1);
+          curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($post_data));
+        }
+      }
 
       return $this->execute($http);
     } // post
@@ -49,10 +72,9 @@
      * @param string $url
      * @param array|null $headers
      * @param array $put_data
-     * @param array $files
      * @return Response
      */
-    function put($url, $headers = null, $put_data = null, $files = null) {
+    function put($url, $headers = null, $put_data = null) {
       $http = $this->getHandle($url, $headers);
 
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'PUT');
