@@ -51,7 +51,14 @@
         $counter = 1;
 
         foreach($files as $file) {
-          $post_data['attachment_' . $counter++] = '@' . $file . ';type=application/octet-stream';
+          if(is_array($file)) {
+            list($path, $mime_type) = $file;
+          } else {
+            $path = $file;
+            $mime_type = 'application/octet-stream';
+          }
+
+          $post_data['attachment_' . $counter++] = '@' . $path . ';type=' . $mime_type;
         }
 
         curl_setopt($http, CURLOPT_POST, 1);

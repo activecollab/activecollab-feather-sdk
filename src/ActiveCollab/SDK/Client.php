@@ -315,7 +315,9 @@
         $counter = 1;
 
         foreach($attachments as $attachment) {
-          if(is_readable($attachment)) {
+          $path = is_array($attachment) ? $attachment[0] : $attachment;
+
+          if(is_readable($path)) {
             $file_params['attachment_' . $counter++] = $attachment;
           } else {
             throw new FileNotReadable($attachment);
