@@ -153,25 +153,8 @@
         throw new CallFailed($error_code, $raw_response, null, $error_message);
       } else {
         $response = new Response($http, $raw_response);
-
         curl_close($http);
-
-        switch($response->getHttpCode()) {
-          case 200:
-            return $response;
-          case 400:
-          case 401:
-          case 403:
-          case 404:
-          case 409:
-          case 500:
-          case 503:
-            if(is_string($raw_response) && substr($raw_response, 0, 1) === '{') {
-              throw new AppException($response->getHttpCode(), $raw_response, $response->getTotalTime()); // Known application exception
-            } // if
-        } // switch
-
-        throw new CallFailed($response->getHttpCode(), $raw_response, $response->getTotalTime()); // Unknown exception
+        return $response;
       } // if
     } // execute
 
