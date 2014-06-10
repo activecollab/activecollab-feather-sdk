@@ -68,11 +68,11 @@
         curl_setopt($http, CURLOPT_POST, 1);
         curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
       } else {
-        if(empty($post_data)) {
-          $post_data = [];
-        } // if
-
-        curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($post_data));
+        if($post_data) {
+          curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($post_data));
+        } else {
+          curl_setopt($http, CURLOPT_POSTFIELDS, '{}');
+        }
       }
 
       return $this->execute($http);
@@ -87,12 +87,21 @@
      * @return Response
      */
     function put($url, $headers = null, $put_data = null) {
+      if(empty($headers)) {
+        $headers = [];
+      }
+
+      $headers[] = 'Content-type: application/json';
+
       $http = $this->getHandle($url, $headers);
 
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'PUT');
+
       if($put_data) {
-        curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($put_data));
-      } // if
+        curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($put_data));
+      } else {
+        curl_setopt($http, CURLOPT_POSTFIELDS, '{}');
+      }
 
       return $this->execute($http);
     } // put
@@ -106,11 +115,20 @@
      * @return Response
      */
     function delete($url, $headers = null, $delete_data = null) {
+      if(empty($headers)) {
+        $headers = [];
+      }
+
+      $headers[] = 'Content-type: application/json';
+
       $http = $this->getHandle($url, $headers);
 
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
       if($delete_data) {
-        curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($delete_data));
+        curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($delete_data));
+      } else {
+        curl_setopt($http, CURLOPT_POSTFIELDS, '{}');
       } // if
 
       return $this->execute($http);
