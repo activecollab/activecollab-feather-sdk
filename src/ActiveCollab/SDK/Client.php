@@ -126,88 +126,6 @@
       return self::$connector;
     } // getConnector
 
-//    /**
-//     * Prepare and execute API command
-//     *
-//     * @param string $command
-//     * @param array $additional_command_params
-//     * @param array $post_params
-//     * @param array $attachments
-//     * @return mixed
-//     * @throws Exceptions\WrapperNotInitialized
-//     * @throws Exceptions\FileNotReadable
-//     */
-//    static function call($command, $additional_command_params = null, $post_params = null, $attachments = null) {
-//      if(empty(self::$url) || empty(self::$key) || empty(self::$connector)) {
-//        throw new WrapperNotInitialized();
-//      } // if
-//
-//      // ---------------------------------------------------
-//      //  Prepare command URl
-//      // ---------------------------------------------------
-//
-//      $data = is_array($additional_command_params) && count($additional_command_params) ? $additional_command_params : array();
-//
-//      $data['path_info'] = $command;
-//      $data['auth_api_token'] = self::$key;
-//      $data['format'] = 'json';
-//      $command_url = self::$url . '?' . http_build_query($data);
-//
-//      // ---------------------------------------------------
-//      //  Prepare attachments
-//      // ---------------------------------------------------
-//
-//      if(empty($attachments)) {
-//        $file_params = null;
-//      } else {
-//        $file_params = array();
-//
-//        $counter = 1;
-//
-//        foreach($attachments as $attachment) {
-//          if(is_readable($attachment)) {
-//            $file_params['attachment_' . $counter++] = $attachment;
-//          } else {
-//            throw new FileNotReadable($attachment);
-//          } // if
-//        } // foreach
-//      } // if
-//
-//      // ---------------------------------------------------
-//      //  Prepare POST variables
-//      // ---------------------------------------------------
-//
-//      if(empty($post_params)) {
-//        $post_params = array();
-//      } else {
-//        if(!isset($post_params['submitted']) || $post_params['submitted'] != 'submitted') {
-//          $post_params['submitted'] = 'submitted';
-//        } // if
-//
-//        foreach($post_params as $post_param => $post_param_value) {
-//          if(is_array($post_param_value)) {
-//            foreach($post_param_value as $k => $v) {
-//              $post_params["{$post_param}[{$k}]"] = $v;
-//            } // foreach
-//
-//            unset($post_params[$post_param]);
-//          } // if
-//        } // foreach
-//      } // if
-//
-//      // ---------------------------------------------------
-//      //  Make the call and decode the result
-//      // ---------------------------------------------------
-//
-//      if(empty($post_params) && empty($file_params)) {
-//        $response = self::$connector->get($command_url);
-//      } else {
-//        $response = self::$connector->post($command_url, $post_params, $file_params);
-//      } // if
-//
-//      return json_decode($response, true);
-//    } // call
-
     /**
      * Send a get request
      *
@@ -284,21 +202,7 @@
      * @return array
      */
     static private function prepareParams($params) {
-      if(empty($params)) {
-        $params = [];
-      } else {
-        foreach($params as $param => $param_value) {
-          if(is_array($param_value)) {
-            foreach($param_value as $k => $v) {
-              $params["{$param}[{$k}]"] = $v;
-            } // foreach
-
-            unset($params[$param]);
-          } // if
-        } // foreach
-      } // if
-
-      return $params;
+      return empty($params) ? [] : $params;
     } // prepareParams
 
     /**
@@ -321,9 +225,9 @@
             $file_params['attachment_' . $counter++] = $attachment;
           } else {
             throw new FileNotReadable($attachment);
-          } // if
-        } // foreach
-      } // if
+          }
+        }
+      }
 
       return $file_params;
     } // prepareAttachments
