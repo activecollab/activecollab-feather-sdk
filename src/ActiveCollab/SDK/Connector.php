@@ -33,15 +33,19 @@
      * @return Response
      */
     function post($url, $headers = null, $post_data = null, $files = null) {
-      if($files) {
-        if(empty($headers)) {
-          $headers = [];
-        }
+      if(empty($headers)) {
+        $headers = [];
+      }
 
+      if($files) {
         $headers[] = 'Content-type: multipart/form-data';
+      } else {
+        $headers[] = 'Content-type: application/json';
       }
 
       $http = $this->getHandle($url, $headers);
+
+      curl_setopt($http, CURLOPT_POST, 1);
 
       if($files) {
         if(empty($post_data)) {
@@ -64,10 +68,11 @@
         curl_setopt($http, CURLOPT_POST, 1);
         curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
       } else {
-        if($post_data) {
-          curl_setopt($http, CURLOPT_POST, 1);
-          curl_setopt($http, CURLOPT_POSTFIELDS, http_build_query($post_data));
-        }
+        if(empty($post_data)) {
+          $post_data = [];
+        } // if
+
+        curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($post_data));
       }
 
       return $this->execute($http);
