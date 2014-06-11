@@ -52,8 +52,8 @@ This example shows how you can create a new task in a selected project:
 ``call()`` method can take four parameters:
 
 1. ``command`` (required) - API command,
-2. ``extra command parameters`` (optional) - Extra variables that will be attached to the command. Most commands don't require any extra command parameters, but some do (like ``dont_limit_result `` param for [Tracked time and expenses listing](https://www.activecollab.com/docs/manuals/developers/api/time#tracking) command),
+2. ``extra command parameters`` (optional) - Extra variables that will be attached to the command. Most commands don't require any extra command parameters, but some do (like ``dont_limit_result `` param for [Tracked time and expenses listing](https://www.activecollab.com/help/books/api/time-and-expenses.html#s-tracking) command),
 3. ``POST variables`` - array of POST variables. Note that you do not need to add ``submitted`` variable (it is automatically added for you),
 4. ``attachments`` - List of file paths that should be attached to the object that is being created or updated.
 
-For full list of available API command, please check [activeCollab API documentation](https://www.activecollab.com/docs/manuals/developers).
+For full list of available API command, please check [activeCollab API documentation](https://www.activecollab.com/help/books/api/index.html).
