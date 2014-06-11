@@ -4,6 +4,8 @@ This is a simple PHP library that makes communication with [activeCollab API](ht
 
 ## First Connection
 
+Pull down the 1.0.1 tag for the following example. The master branch and anything beyond that is in active development and is not currently supported.
+
 In order to connect, you will need API URL and API token. 
 
 To get these details, go to your user profile in your activeCollab and select **API Subscriptions** from **Options** drop-down. Click on **New Subscription** button and fill the form (client name is name of your app that will communicate with activeCollab via API). After you create API subscription for your application, click on the magnifier glass icon to open a dialog that will show you API URL and token for that subscription.
