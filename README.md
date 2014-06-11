@@ -4,7 +4,7 @@ This is a simple PHP library that makes communication with [activeCollab API](ht
 
 ## First Connection
 
-Pull down the 1.0.1 tag for the following example. The master branch and anything beyond that is in active development and is not currently supported.
+Pull down the 1.0.1 tag for the following example. The development branch is not currently supported.
 
 In order to connect, you will need API URL and API token. 
 
