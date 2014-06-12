@@ -16,8 +16,6 @@
 
     },
     "autoload": {
-      "psr-0": {
-        "ActiveCollab": "ActiveCollab"
-      }
+      "classmap": [ "ActiveCollab" ]
     }
 }
