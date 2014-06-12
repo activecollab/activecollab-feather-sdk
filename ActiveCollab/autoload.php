@@ -8,6 +8,6 @@
     $parts = explode('\\', $class);
 
     if(array_shift($parts) == 'ActiveCollab') {
-      require_once __DIR__ . '/' . implode('/', $parts) . '.class.php';
+      require_once __DIR__ . '/' . implode('/', $parts) . '.php';
     } //
   });
