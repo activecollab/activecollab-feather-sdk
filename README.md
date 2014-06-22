@@ -30,6 +30,35 @@ Now that you have API token and URL, you can test out this simple example:
 
 This example will contact activeCollab and ask for application and user info. Response is a simple associative array with a lot of details about the system that you are communicating with.
 
+## Using Composer
+
+If you choose to install this application with composer instead of pulling down the git repository you will need to add a composer.json file to the location you would like to pull the repository down to featuring
+
+
+    {
+        "require": {
+            "activecollab/activecollab-sdk": "1.0.3"
+        }
+    }
+    
+Run a composer update to install the package. To test the API add the following to a php file and run it.
+
+    <?php
+    
+      require_once 'vendor/autoload.php';
+    
+      use \ActiveCollab\Client as API;
+      use \ActiveCollab\Connectors\Curl as CurlConnector;
+      use \ActiveCollab\Exceptions\AppException;
+    
+      API::setUrl('MY-API-URL');
+      API::setKey('MY-API-TOKEN');
+      API::setConnector(new CurlConnector);
+    
+      print '<pre>';
+      print_r(API::info());
+      print '</pre>';
+
 # Making API Calls
 
 Listing all tasks in project #65 is easy. Just call:
