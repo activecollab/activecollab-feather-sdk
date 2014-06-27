@@ -12,21 +12,23 @@ To get these details, go to your user profile in your activeCollab and select **
 
 Now that you have API token and URL, you can test out this simple example:
 
-    <?php
-    
-      require_once 'ActiveCollab/autoload.php';
-    
-      use \ActiveCollab\Client as API;
-      use \ActiveCollab\Connectors\Curl as CurlConnector;
-      use \ActiveCollab\Exceptions\AppException;
-    
-      API::setUrl('MY-API-URL');
-      API::setKey('MY-API-TOKEN');
-      API::setConnector(new CurlConnector);
-    
-      print '<pre>';
-      print_r(API::info());
-      print '</pre>';
+```php
+<?php
+
+  require_once 'ActiveCollab/autoload.php';
+
+  use \ActiveCollab\Client as API;
+  use \ActiveCollab\Connectors\Curl as CurlConnector;
+  use \ActiveCollab\Exceptions\AppException;
+
+  API::setUrl('MY-API-URL');
+  API::setKey('MY-API-TOKEN');
+  API::setConnector(new CurlConnector);
+
+  print '<pre>';
+  print_r(API::info());
+  print '</pre>';
+```
 
 This example will contact activeCollab and ask for application and user info. Response is a simple associative array with a lot of details about the system that you are communicating with.
 
@@ -34,51 +36,58 @@ This example will contact activeCollab and ask for application and user info. Re
 
 If you choose to install this application with composer instead of pulling down the git repository you will need to add a composer.json file to the location you would like to pull the repository down to featuring:
 
-
-    {
-        "require": {
-            "activecollab/activecollab-sdk": "1.0.*"
-        }
+```json
+{
+    "require": {
+        "activecollab/activecollab-sdk": "1.0.*"
     }
+}
+```
     
 Run a ``composer update`` to install the package. To test the API add the following to a php file and run it.
 
-    <?php
-    
-      require_once 'vendor/autoload.php';
-    
-      use \ActiveCollab\Client as API;
-      use \ActiveCollab\Connectors\Curl as CurlConnector;
-      use \ActiveCollab\Exceptions\AppException;
-    
-      API::setUrl('MY-API-URL');
-      API::setKey('MY-API-TOKEN');
-      API::setConnector(new CurlConnector);
-    
-      print '<pre>';
-      print_r(API::info());
-      print '</pre>';
+```php
+<?php
+
+  require_once 'vendor/autoload.php';
+
+  use \ActiveCollab\Client as API;
+  use \ActiveCollab\Connectors\Curl as CurlConnector;
+  use \ActiveCollab\Exceptions\AppException;
+
+  API::setUrl('MY-API-URL');
+  API::setKey('MY-API-TOKEN');
+  API::setConnector(new CurlConnector);
+
+  print '<pre>';
+  print_r(API::info());
+  print '</pre>';
+```
 
 # Making API Calls
 
 Listing all tasks in project #65 is easy. Just call:
 
-    API::call('projects/65/tasks');
+```php
+API::call('projects/65/tasks');
+```
 
 This example shows how you can create a new task in a selected project:
 
-    try {
-      API::call('projects/65/tasks/add', null, array(
-        'task[name]' => 'This is a task name',
-        'task[assignee_id]' => 48,
-        'task[other_assignees]' => array(3, 1),
-      ), array(
-        '/attach.jpeg'
-      ));
-    } catch(AppException $e) {
-      print $e->getMessage() . '<br><br>';
-      // var_dump($e->getServerResponse()); (need more info?)
-    } // try
+```php
+try {
+  API::call('projects/65/tasks/add', null, array(
+    'task[name]' => 'This is a task name',
+    'task[assignee_id]' => 48,
+    'task[other_assignees]' => array(3, 1),
+  ), array(
+    '/attach.jpeg'
+  ));
+} catch(AppException $e) {
+  print $e->getMessage() . '<br><br>';
+  // var_dump($e->getServerResponse()); (need more info?)
+} // try
+```
 
 ``call()`` method can take four parameters:
 
