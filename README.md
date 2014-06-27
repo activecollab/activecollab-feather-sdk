@@ -37,7 +37,7 @@ If you choose to install this application with composer instead of pulling down 
 
     {
         "require": {
-            "activecollab/activecollab-sdk": "1.0.3"
+            "activecollab/activecollab-sdk": "1.0.*"
         }
     }
     
