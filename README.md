@@ -32,7 +32,7 @@ This example will contact activeCollab and ask for application and user info. Re
 
 ## Using Composer
 
-If you choose to install this application with composer instead of pulling down the git repository you will need to add a composer.json file to the location you would like to pull the repository down to featuring
+If you choose to install this application with composer instead of pulling down the git repository you will need to add a composer.json file to the location you would like to pull the repository down to featuring:
 
 
     {
@@ -41,7 +41,7 @@ If you choose to install this application with composer instead of pulling down 
         }
     }
     
-Run a composer update to install the package. To test the API add the following to a php file and run it.
+Run a ``composer update`` to install the package. To test the API add the following to a php file and run it.
 
     <?php
     
