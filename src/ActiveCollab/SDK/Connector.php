@@ -19,9 +19,10 @@
      * @param array|null $headers
      * @return Response
      */
-    function get($url, $headers = null) {
+    function get($url, $headers = null)
+    {
       return $this->execute($http = $this->getHandle($url, $headers));
-    } // get
+    }
 
     /**
      * POST data
@@ -32,7 +33,8 @@
      * @param array $files
      * @return Response
      */
-    function post($url, $headers = null, $post_data = null, $files = null) {
+    function post($url, $headers = null, $post_data = null, $files = null)
+    {
       if(empty($headers)) {
         $headers = [];
       }
@@ -76,7 +78,7 @@
       }
 
       return $this->execute($http);
-    } // post
+    }
 
     /**
      * Send a PUT request
@@ -86,7 +88,8 @@
      * @param array $put_data
      * @return Response
      */
-    function put($url, $headers = null, $put_data = null) {
+    function put($url, $headers = null, $put_data = null)
+    {
       if(empty($headers)) {
         $headers = [];
       }
@@ -104,7 +107,7 @@
       }
 
       return $this->execute($http);
-    } // put
+    }
 
     /**
      * Send a DELETE request
@@ -114,7 +117,8 @@
      * @param array $delete_data
      * @return Response
      */
-    function delete($url, $headers = null, $delete_data = null) {
+    function delete($url, $headers = null, $delete_data = null)
+    {
       if(empty($headers)) {
         $headers = [];
       }
@@ -129,10 +133,10 @@
         curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($delete_data));
       } else {
         curl_setopt($http, CURLOPT_POSTFIELDS, '{}');
-      } // if
+      }
 
       return $this->execute($http);
-    } // delete
+    }
 
     /**
      * Return curl resource
@@ -141,7 +145,8 @@
      * @param array|null $headers
      * @return resource
      */
-    private function &getHandle($url, $headers) {
+    private function &getHandle($url, $headers)
+    {
       $http = curl_init();
 
       curl_setopt($http, CURLOPT_USERAGENT, Client::getUserAgent());
@@ -151,10 +156,10 @@
 
       if(is_array($headers) && count($headers)) {
         curl_setopt($http, CURLOPT_HTTPHEADER, $headers);
-      } // if
+      }
 
       return $http;
-    } // getHandle
+    }
 
     /**
      * Do the call
@@ -164,7 +169,8 @@
      * @throws CallFailed
      * @throws AppException
      */
-    private function execute(&$http) {
+    private function execute(&$http)
+    {
       $raw_response = curl_exec($http);
 
       if($raw_response === false) {
@@ -178,7 +184,7 @@
         $response = new Response($http, $raw_response);
         curl_close($http);
         return $response;
-      } // if
-    } // execute
+      }
+    }
 
   }
