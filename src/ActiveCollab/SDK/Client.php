@@ -228,10 +228,15 @@
     {
       $bits = parse_url($path);
 
-      $path_info = isset($bits['path']) && $bits['path'] ? $bits['path'] : '/';
+      $path = isset($bits['path']) && $bits['path'] ? $bits['path'] : '/';
+
+      if (substr($path, 0, 1) !== '/') {
+        $path = '/' . $path;
+      }
+
       $query = isset($bits['query']) && $bits['query'] ? '?' . $bits['query'] : '';
 
-      return self::getUrl() . '/api/v' . self::getApiVersion() . '/' . $path_info . $query;
+      return self::getUrl() . '/api/v' . self::getApiVersion() . $path . $query;
     }
 
     /**
