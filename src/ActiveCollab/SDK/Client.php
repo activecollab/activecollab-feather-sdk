@@ -3,6 +3,7 @@
   namespace ActiveCollab\SDK;
 
   use ActiveCollab\SDK\Exceptions\FileNotReadable;
+  use ActiveCollab\SDK\Exceptions\IssueTokenException;
 
   /**
    * activeCollab API client
@@ -157,6 +158,40 @@
       }
 
       return self::$connector;
+    }
+
+    /**
+     * @param string $email_or_username
+     * @param string $password
+     * @param string $client_name
+     * @param string $client_vendor
+     * @param bool $read_only
+     * @return string
+     * @throws Exceptions\IssueTokenException
+     */
+    static function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false)
+    {
+      $response = self::getConnector()->post(self::prepareUrl('issue-token'), [], self::prepareParams([
+        'username' => $email_or_username,
+        'password' => $password,
+        'client_name' => $client_name,
+        'client_vendor' => $client_vendor,
+        'read_only' => $read_only,
+      ]));
+
+      $error = 0;
+
+      if ($response instanceof Response && $response->isJson()) {
+        $json = $response->getJson();
+
+        if ($json['is_error']) {
+          $error = $json['error'];
+        } else {
+          return $json['token'];
+        }
+      }
+
+      throw new IssueTokenException($error);
     }
 
     /**
