@@ -21,7 +21,8 @@
      */
     function get($url, $headers = null)
     {
-      return $this->execute($http = $this->getHandle($url, $headers));
+      $http = $this->getHandle($url, $headers);
+      return $this->execute($http);
     }
 
     /**
