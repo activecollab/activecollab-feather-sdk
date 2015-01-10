@@ -10,7 +10,6 @@
    */
   final class Client
   {
-
     // API wrapper version
     const VERSION = '5.0.0';
 
@@ -41,7 +40,7 @@
      * @param string|bool $property
      * @return bool|null|string
      */
-    static function info($property = false)
+    public static function info($property = false)
     {
       if (self::$info_response === false) {
         self::$info_response = self::get('info')->getJson();
@@ -70,7 +69,7 @@
      *
      * @return string
      */
-    static function getUrl()
+    public static function getUrl()
     {
       return self::$url;
     }
@@ -80,7 +79,7 @@
      *
      * @param string $value
      */
-    static function setUrl($value)
+    public static function setUrl($value)
     {
       self::$url = $value;
     }
@@ -97,7 +96,7 @@
      *
      * @return int
      */
-    static function getApiVersion()
+    public static function getApiVersion()
     {
       return self::$api_version;
     }
@@ -107,7 +106,7 @@
      *
      * @param integer $version
      */
-    static public function setApiVersion($version)
+    public static function setApiVersion($version)
     {
       self::$api_version = (integer) $version;
     }
@@ -124,7 +123,7 @@
      *
      * @return string
      */
-    static function getKey()
+    public static function getKey()
     {
       return self::$key;
     }
@@ -134,7 +133,7 @@
      *
      * @param string $value
      */
-    static function setKey($value)
+    public static function setKey($value)
     {
       self::$key = $value;
     }
@@ -151,7 +150,7 @@
      *
      * @return Connector
      */
-    static function &getConnector()
+    public static function &getConnector()
     {
       if (empty(self::$connector)) {
         self::$connector = new Connector();
@@ -169,7 +168,7 @@
      * @return string
      * @throws Exceptions\IssueTokenException
      */
-    static function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false)
+    public static function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false)
     {
       $response = self::getConnector()->post(self::prepareUrl('issue-token'), [], self::prepareParams([
         'username' => $email_or_username,
@@ -200,7 +199,7 @@
      * @param string $path
      * @return Response
      */
-    static function get($path)
+    public static function get($path)
     {
       return self::getConnector()->get(self::prepareUrl($path), self::prepareHeaders());
     }
@@ -213,7 +212,7 @@
      * @param array|null $attachments
      * @return Response
      */
-    static function post($path, $params = null, $attachments = null)
+    public static function post($path, $params = null, $attachments = null)
     {
       return self::getConnector()->post(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
     }
@@ -226,7 +225,7 @@
      * @param array|null $attachments
      * @return Response
      */
-    static function put($path, $params = null, $attachments = null)
+    public static function put($path, $params = null, $attachments = null)
     {
       return self::getConnector()->put(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
     }
@@ -238,7 +237,7 @@
      * @param array|null $params
      * @return Response
      */
-    static function delete($path, $params = null)
+    public static function delete($path, $params = null)
     {
       return self::getConnector()->delete(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params));
     }
@@ -248,7 +247,7 @@
      *
      * @return array
      */
-    static private function prepareHeaders()
+    private static function prepareHeaders()
     {
       return [ 'X-Angie-AuthApiToken: ' . self::getKey() ];
     }
@@ -259,7 +258,7 @@
      * @param string $path
      * @return string
      */
-    static private function prepareUrl($path)
+    private static function prepareUrl($path)
     {
       $bits = parse_url($path);
 
@@ -280,7 +279,7 @@
      * @param array|null $params
      * @return array
      */
-    static private function prepareParams($params)
+    private static function prepareParams($params)
     {
       return empty($params) ? [] : $params;
     }
@@ -292,7 +291,7 @@
      * @return array|null
      * @throws Exceptions\FileNotReadable
      */
-    static private function prepareAttachments($attachments = null)
+    private static function prepareAttachments($attachments = null)
     {
       $file_params = [];
 
@@ -312,5 +311,4 @@
 
       return $file_params;
     }
-
   }
