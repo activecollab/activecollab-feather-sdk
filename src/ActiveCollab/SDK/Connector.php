@@ -66,6 +66,7 @@
           $post_data['attachment_' . $counter++] = '@' . $path . ';type=' . $mime_type;
         }
 
+        curl_setopt($http, CURLOPT_SAFE_UPLOAD, false); // PHP 5.6 compatibility for file uploads
         curl_setopt($http, CURLOPT_POST, 1);
         curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
       } else {
