@@ -18,7 +18,16 @@ Now that you have API token and URL, you can test out this simple example:
       use \ActiveCollab\Exceptions\AppException;
     
       API::setUrl('MY-API-URL');
-      API::setKey('MY-API-TOKEN');
+      
+      // Use issueToken() method to get a new token. Store it for later use
+      try {
+        $token = API::issueToken('my@email.com', 'MY-PASSWORD', 'NAME-OF-MY-APP', 'NAME-OF-MY-COMPANY');
+      } catch (Exception $e) {
+        die($e->getMessage());
+      }
+      
+      // Set token before making calls
+      API::setKey($token);
     
       print '<pre>';
       print_r(API::info());
@@ -35,17 +44,17 @@ Listing all tasks in project #65 is easy. Just call:
 This example shows how you can create a new task in a selected project:
 
     try {
-      API::call('projects/65/tasks/add', null, array(
+      API::call('projects/65/tasks/add', null, [
         'task[name]' => 'This is a task name',
         'task[assignee_id]' => 48,
         'task[other_assignees]' => array(3, 1),
-      ), array(
+      ], [
         '/attach.jpeg'
-      ));
+      ]);
     } catch(AppException $e) {
       print $e->getMessage() . '<br><br>';
       // var_dump($e->getServerResponse()); (need more info?)
-    } // try
+    }
 
 ``call()`` method can take four parameters:
 

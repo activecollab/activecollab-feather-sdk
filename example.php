@@ -1,6 +1,6 @@
 <?php
 
-  require_once __DIR__ . '/src/ActiveCollab/SDK/autoload.php';
+  require_once __DIR__.'/src/ActiveCollab/SDK/autoload.php';
 
   use \ActiveCollab\SDK\Client as API;
 

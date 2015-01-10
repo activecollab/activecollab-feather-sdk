@@ -1,46 +1,44 @@
 <?php
-
   namespace ActiveCollab\SDK;
 
-  use ActiveCollab\SDK\Response;
   use ActiveCollab\SDK\Exceptions\AppException;
   use ActiveCollab\SDK\Exceptions\CallFailed;
 
-
   /**
-   * Abstract connector
+   * Connector makes requests and returns API responses
    */
-  class Connector {
-
+  final class Connector
+  {
     /**
      * GET data
      *
-     * @param string $url
-     * @param array|null $headers
+     * @param  string $url
+     * @param  array|null $headers
      * @return Response
      */
-    function get($url, $headers = null)
+    public function get($url, $headers = null)
     {
       $http = $this->getHandle($url, $headers);
+
       return $this->execute($http);
     }
 
     /**
      * POST data
      *
-     * @param string $url
-     * @param array|null $headers
-     * @param array $post_data
-     * @param array $files
+     * @param  string $url
+     * @param  array|null $headers
+     * @param  array $post_data
+     * @param  array $files
      * @return Response
      */
-    function post($url, $headers = null, $post_data = null, $files = null)
+    public function post($url, $headers = null, $post_data = null, $files = null)
     {
-      if(empty($headers)) {
+      if (empty($headers)) {
         $headers = [];
       }
 
-      if($files) {
+      if ($files) {
         $headers[] = 'Content-type: multipart/form-data';
       } else {
         $headers[] = 'Content-type: application/json';
@@ -50,15 +48,15 @@
 
       curl_setopt($http, CURLOPT_POST, 1);
 
-      if($files) {
-        if(empty($post_data)) {
+      if ($files) {
+        if (empty($post_data)) {
           $post_data = [];
         }
 
         $counter = 1;
 
-        foreach($files as $file) {
-          if(is_array($file)) {
+        foreach ($files as $file) {
+          if (is_array($file)) {
             list($path, $mime_type) = $file;
           } else {
             $path = $file;
@@ -71,7 +69,7 @@
         curl_setopt($http, CURLOPT_POST, 1);
         curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
       } else {
-        if($post_data) {
+        if ($post_data) {
           curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($post_data));
         } else {
           curl_setopt($http, CURLOPT_POSTFIELDS, '{}');
@@ -84,14 +82,14 @@
     /**
      * Send a PUT request
      *
-     * @param string $url
-     * @param array|null $headers
-     * @param array $put_data
+     * @param  string $url
+     * @param  array|null $headers
+     * @param  array $put_data
      * @return Response
      */
-    function put($url, $headers = null, $put_data = null)
+    public function put($url, $headers = null, $put_data = null)
     {
-      if(empty($headers)) {
+      if (empty($headers)) {
         $headers = [];
       }
 
@@ -101,7 +99,7 @@
 
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'PUT');
 
-      if($put_data) {
+      if ($put_data) {
         curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($put_data));
       } else {
         curl_setopt($http, CURLOPT_POSTFIELDS, '{}');
@@ -113,14 +111,14 @@
     /**
      * Send a DELETE request
      *
-     * @param string $url
-     * @param array|null $headers
-     * @param array $delete_data
+     * @param  string $url
+     * @param  array|null $headers
+     * @param  array $delete_data
      * @return Response
      */
-    function delete($url, $headers = null, $delete_data = null)
+    public function delete($url, $headers = null, $delete_data = null)
     {
-      if(empty($headers)) {
+      if (empty($headers)) {
         $headers = [];
       }
 
@@ -130,7 +128,7 @@
 
       curl_setopt($http, CURLOPT_CUSTOMREQUEST, 'DELETE');
 
-      if($delete_data) {
+      if ($delete_data) {
         curl_setopt($http, CURLOPT_POSTFIELDS, json_encode($delete_data));
       } else {
         curl_setopt($http, CURLOPT_POSTFIELDS, '{}');
@@ -142,8 +140,8 @@
     /**
      * Return curl resource
      *
-     * @param string $url
-     * @param array|null $headers
+     * @param  string $url
+     * @param  array|null $headers
      * @return resource
      */
     private function &getHandle($url, $headers)
@@ -155,7 +153,7 @@
       curl_setopt($http, CURLINFO_HEADER_OUT, true);
       curl_setopt($http, CURLOPT_URL, $url);
 
-      if(is_array($headers) && count($headers)) {
+      if (is_array($headers) && count($headers)) {
         curl_setopt($http, CURLOPT_HTTPHEADER, $headers);
       }
 
@@ -165,7 +163,7 @@
     /**
      * Do the call
      *
-     * @param resource $http
+     * @param  resource $http
      * @return string
      * @throws CallFailed
      * @throws AppException
@@ -174,7 +172,7 @@
     {
       $raw_response = curl_exec($http);
 
-      if($raw_response === false) {
+      if ($raw_response === false) {
         $error_code = curl_errno($http);
         $error_message = curl_error($http);
 
@@ -184,8 +182,8 @@
       } else {
         $response = new Response($http, $raw_response);
         curl_close($http);
+
         return $response;
       }
     }
-
   }

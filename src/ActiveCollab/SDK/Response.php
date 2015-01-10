@@ -5,8 +5,8 @@
   /**
    * Abstract result
    */
-  class Response {
-
+  class Response
+  {
     /**
      * Result of curl_getinfo() call
      *
@@ -52,19 +52,21 @@
      * @param resource $http
      * @param string|null $raw_response
      */
-    function __construct(&$http, $raw_response) {
+    public function __construct(&$http, $raw_response)
+    {
       $this->info = curl_getinfo($http);
       $this->raw_response = $raw_response;
-    } // __construct
+    }
 
     /**
      * Return raw response body
      *
      * @return string
      */
-    function getBody() {
+    public function getBody()
+    {
       return $this->raw_response;
-    } // getBody
+    }
 
     /**
      * Cached JSON data
@@ -78,66 +80,70 @@
      *
      * @return boolean
      */
-    function isJson() {
-      if($this->is_json === null) {
+    public function isJson()
+    {
+      if ($this->is_json === null) {
         $this->is_json = strpos($this->getContentType(), 'application/json') !== false;
-      } // if
+      }
 
       return $this->is_json;
-    } // isJson
+    }
 
     /**
      * Return response body as JSON (when applicable)
      *
      * @return mixed
      */
-    function getJson() {
-      if(empty($this->json_loaded)) {
-        if($this->getBody() && $this->isJson()) {
+    public function getJson()
+    {
+      if (empty($this->json_loaded)) {
+        if ($this->getBody() && $this->isJson()) {
           $this->json = json_decode($this->getBody(), true);
-        } // if
+        }
 
         $this->json_loaded = true;
-      } // if
+      }
 
       return $this->json;
-    } // getJson
+    }
 
     /**
      * Return content type
      *
      * @return string
      */
-    function getContentType() {
+    public function getContentType()
+    {
       return isset($this->info['content_type']) && $this->info['content_type'] ? $this->info['content_type'] : null;
-    } // getContentType
+    }
 
     /**
      * Return HTTP code
      *
      * @return integer
      */
-    function getHttpCode() {
+    public function getHttpCode()
+    {
       return isset($this->info['http_code']) && $this->info['http_code'] ? $this->info['http_code'] : null;
-    } // getHttpCode
+    }
 
     /**
      * Make all info elements available via getElementName() magic methods
      *
-     * @param string $name
-     * @param array $arguments
+     * @param  string $name
+     * @param  array $arguments
      * @return mixed
      */
-    function __call($name, $arguments) {
-      if(substr($name, 0, 3) == 'get') {
+    public function __call($name, $arguments)
+    {
+      if (substr($name, 0, 3) == 'get') {
         $bit = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', substr($name, 3)));
 
-        if(isset($this->info[$bit]) && $this->info[$bit]) {
+        if (isset($this->info[$bit]) && $this->info[$bit]) {
           return $this->info[$bit];
-        } // if
-      } // if
+        }
+      }
 
       return null;
-    } // __call
-
+    }
   }

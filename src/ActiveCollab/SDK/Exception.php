@@ -5,6 +5,6 @@
   /**
    * Base activeCollab exception
    */
-  abstract class Exception extends \Exception {
-
+  abstract class Exception extends \Exception
+  {
   }

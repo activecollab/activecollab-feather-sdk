@@ -7,14 +7,14 @@
   /**
    * HTTP API call exception
    */
-  class CallFailed extends Exception {
-
+  class CallFailed extends Exception
+  {
     /**
      * Error codes from API
      *
      * @var array
      */
-    private $http_codes = array(
+    private $http_codes = [
       100 => 'Continue',
       101 => 'Switching Protocols',
       200 => 'OK',
@@ -53,8 +53,8 @@
       501 => 'Not Implemented',
       502 => 'Bad Gateway',
       503 => 'Service Unavailable',
-      504 => 'Gateway Time-out'
-    );
+      504 => 'Gateway Time-out',
+    ];
 
     /**
      * Construct the new exception instance
@@ -64,27 +64,28 @@
      * @param float|null $request_time
      * @param string $message
      */
-    function __construct($http_code, $server_response = null, $request_time = null, $message = null) {
+    public function __construct($http_code, $server_response = null, $request_time = null, $message = null)
+    {
       $this->http_code = $http_code;
 
-      if($server_response && substr($server_response, 0, 1) === '{') {
+      if ($server_response && substr($server_response, 0, 1) === '{') {
         $this->server_response = json_decode($server_response, true);
       } else {
         $this->server_response = $server_response;
-      } // if
+      }
 
       $this->request_time = $request_time;
 
-      if(empty($message)) {
-        if(isset($this->http_codes[$http_code])) {
+      if (empty($message)) {
+        if (isset($this->http_codes[$http_code])) {
           $message = 'HTTP error ' . $http_code . ': ' . $this->http_codes[$http_code];
         } else {
           $message = 'Unknown HTTP error';
-        } // if
-      } // if
+        }
+      }
 
       parent::__construct($message);
-    } // __construct
+    }
 
     /**
      * @var integer
@@ -96,9 +97,10 @@
      *
      * @return integer
      */
-    function getHttpCode() {
+    public function getHttpCode()
+    {
       return $this->http_code;
-    } // getHttpCode
+    }
 
     /**
      * @var string
@@ -110,9 +112,10 @@
      *
      * @return integer
      */
-    function getServerResponse() {
+    public function getServerResponse()
+    {
       return $this->server_response;
-    } // getServerResponse
+    }
 
     /**
      * @var float|null
@@ -122,8 +125,8 @@
     /**
      * Return total request time
      */
-    function getRequestTime() {
+    public function getRequestTime()
+    {
       return $this->request_time;
-    } // getRequestTime
-
+    }
   }

@@ -10,15 +10,14 @@
    */
   final class Client
   {
-    // API wrapper version
-    const VERSION = '5.0.0';
+    const VERSION = '5.0.0'; // API wrapper version
 
     /**
      * Return user agent string
      *
      * @return string
      */
-    static function getUserAgent()
+    public static function getUserAgent()
     {
       return 'activeCollab API Wrapper; v' . self::VERSION;
     }
@@ -37,7 +36,7 @@
     /**
      * Return info
      *
-     * @param string|bool $property
+     * @param  string|bool $property
      * @return bool|null|string
      */
     public static function info($property = false)
@@ -62,7 +61,7 @@
      *
      * @var string
      */
-    static private $url;
+    private static $url;
 
     /**
      * Return API URL
@@ -89,7 +88,7 @@
      *
      * @var int
      */
-    static private $api_version = 1;
+    private static $api_version = 1;
 
     /**
      * Return API version
@@ -108,7 +107,7 @@
      */
     public static function setApiVersion($version)
     {
-      self::$api_version = (integer) $version;
+      self::$api_version = (integer)$version;
     }
 
     /**
@@ -116,7 +115,7 @@
      *
      * @var string
      */
-    static private $key;
+    private static $key;
 
     /**
      * Return API key
@@ -143,7 +142,7 @@
      *
      * @var \ActiveCollab\SDK\Connector
      */
-    static private $connector;
+    private static $connector;
 
     /**
      * Return connector instance
@@ -160,11 +159,11 @@
     }
 
     /**
-     * @param string $email_or_username
-     * @param string $password
-     * @param string $client_name
-     * @param string $client_vendor
-     * @param bool $read_only
+     * @param  string $email_or_username
+     * @param  string $password
+     * @param  string $client_name
+     * @param  string $client_vendor
+     * @param  bool $read_only
      * @return string
      * @throws Exceptions\IssueTokenException
      */
@@ -196,7 +195,7 @@
     /**
      * Send a get request
      *
-     * @param string $path
+     * @param  string $path
      * @return Response
      */
     public static function get($path)
@@ -207,9 +206,9 @@
     /**
      * Send a POST request
      *
-     * @param string $path
-     * @param array|null $params
-     * @param array|null $attachments
+     * @param  string $path
+     * @param  array|null $params
+     * @param  array|null $attachments
      * @return Response
      */
     public static function post($path, $params = null, $attachments = null)
@@ -221,8 +220,8 @@
      * Send a PUT request
      *
      * @param $path
-     * @param array|null $params
-     * @param array|null $attachments
+     * @param  array|null $params
+     * @param  array|null $attachments
      * @return Response
      */
     public static function put($path, $params = null, $attachments = null)
@@ -234,7 +233,7 @@
      * Send a delete command
      *
      * @param $path
-     * @param array|null $params
+     * @param  array|null $params
      * @return Response
      */
     public static function delete($path, $params = null)
@@ -255,7 +254,7 @@
     /**
      * Prepare URL from the given path
      *
-     * @param string $path
+     * @param  string $path
      * @return string
      */
     private static function prepareUrl($path)
@@ -276,7 +275,7 @@
     /**
      * Prepare params
      *
-     * @param array|null $params
+     * @param  array|null $params
      * @return array
      */
     private static function prepareParams($params)
@@ -287,7 +286,7 @@
     /**
      * Prepare attachments for request
      *
-     * @param array|null $attachments
+     * @param  array|null $attachments
      * @return array|null
      * @throws Exceptions\FileNotReadable
      */
