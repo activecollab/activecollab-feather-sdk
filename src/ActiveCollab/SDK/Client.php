@@ -206,7 +206,7 @@
     /**
      * Send a POST request
      *
-     * @param  string $path
+     * @param  string     $path
      * @param  array|null $params
      * @param  array|null $attachments
      * @return Response
@@ -219,7 +219,7 @@
     /**
      * Send a PUT request
      *
-     * @param $path
+     * @param  string     $path
      * @param  array|null $params
      * @param  array|null $attachments
      * @return Response
@@ -232,7 +232,7 @@
     /**
      * Send a delete command
      *
-     * @param $path
+     * @param  string     $path
      * @param  array|null $params
      * @return Response
      */

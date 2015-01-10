@@ -56,19 +56,16 @@ This example will contact activeCollab and ask for application and user info. Re
 Listing all tasks in project #65 is easy. Just call:
 
 ```php
-API::call('projects/65/tasks');
+API::get('projects/65/tasks');
 ```
 
-This example shows how you can create a new task in a selected project:
+To create a task, simply send a POST request:
 
 ```php
 try {
-  API::call('projects/65/tasks/add', null, [
-    'task[name]' => 'This is a task name',
-    'task[assignee_id]' => 48,
-    'task[other_assignees]' => array(3, 1),
-  ], [
-    '/attach.jpeg'
+  API::post('projects/65/tasks', [
+    'name' => 'This is a task name',
+    'assignee_id' => 48
   ]);
 } catch(AppException $e) {
   print $e->getMessage() . '<br><br>';
@@ -76,11 +73,35 @@ try {
 }
 ```
 
-``call()`` method can take four parameters:
+To update a task, PUT request will be needed:
+
+```php
+try {
+  API::put('projects/65/tasks/123', [
+    'name' => 'Updated named'
+  ]);
+} catch(AppException $e) {
+  print $e->getMessage() . '<br><br>';
+  // var_dump($e->getServerResponse()); (need more info?)
+}
+```
+
+``post()`` and ``put()`` methods can take two arguments:
 
 1. ``command`` (required) - API command,
-2. ``extra command parameters`` (optional) - Extra variables that will be attached to the command. Most commands don't require any extra command parameters, but some do (like ``dont_limit_result `` param for [Tracked time and expenses listing](https://www.activecollab.com/docs/manuals/developers/api/time#tracking) command),
-3. ``POST variables`` - array of POST variables. Note that you do not need to add ``submitted`` variable (it is automatically added for you),
-4. ``attachments`` - List of file paths that should be attached to the object that is being created or updated.
+3. ``variables`` - array of request variables (payload)
+
+To remove a task, call:
+
+```php
+try {
+  API::delete('projects/65/tasks/123');
+} catch(AppException $e) {
+  print $e->getMessage() . '<br><br>';
+  // var_dump($e->getServerResponse()); (need more info?)
+}
+```
+
+``delete()`` method only requires ``command`` argument to be provided.
 
 For full list of available API command, please check [activeCollab API documentation](https://www.activecollab.com/docs/manuals/developers).
