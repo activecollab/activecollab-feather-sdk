@@ -9,7 +9,7 @@ If you choose to install this application with Composer instead of pulling down 
 ```json
 {
     "require": {
-        "activecollab/activecollab-sdk": "~2"
+        "activecollab/activecollab-sdk": "~2.0"
     }
 }
 ```
