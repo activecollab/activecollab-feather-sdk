@@ -248,7 +248,7 @@
      */
     private static function prepareHeaders()
     {
-      return [ 'X-Angie-AuthApiToken: ' . self::getKey() ];
+      return [ 'Authorization: Token ' . self::getKey() ];
     }
 
     /**
