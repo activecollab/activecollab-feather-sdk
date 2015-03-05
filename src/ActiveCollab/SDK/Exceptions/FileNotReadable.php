@@ -1,26 +1,25 @@
 <?php
 
-  namespace ActiveCollab\Exceptions;
+  namespace ActiveCollab\SDK\Exceptions;
 
-  use ActiveCollab\Exception;
-
+  use ActiveCollab\SDK\Exception;
 
   /**
    * HTTP API call exception
    */
-  class FileNotReadable extends Exception {
-
+  class FileNotReadable extends Exception
+  {
     /**
      * Construct the new exception instance
      *
      * @param string $path
      */
-    function __construct($path) {
-      if(empty($message)) {
+    public function __construct($path)
+    {
+      if (empty($message)) {
         $message = "File '$path' is not readable";
-      } // if
+      }
 
       parent::__construct($message);
-    } // __construct
-
+    }
   }

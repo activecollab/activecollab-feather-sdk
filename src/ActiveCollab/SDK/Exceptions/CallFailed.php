@@ -1,20 +1,20 @@
 <?php
 
-  namespace ActiveCollab\Exceptions;
+  namespace ActiveCollab\SDK\Exceptions;
 
-  use ActiveCollab\Exception;
+  use ActiveCollab\SDK\Exception;
 
   /**
    * HTTP API call exception
    */
-  class CallFailed extends Exception {
-
+  class CallFailed extends Exception
+  {
     /**
      * Error codes from API
      *
      * @var array
      */
-    private $http_codes = array(
+    private $http_codes = [
       100 => 'Continue',
       101 => 'Switching Protocols',
       200 => 'OK',
@@ -53,26 +53,80 @@
       501 => 'Not Implemented',
       502 => 'Bad Gateway',
       503 => 'Service Unavailable',
-      504 => 'Gateway Time-out'
-    );
+      504 => 'Gateway Time-out',
+    ];
 
     /**
      * Construct the new exception instance
      *
-     * @param integer $code
+     * @param integer $http_code
      * @param string $server_response
+     * @param float|null $request_time
      * @param string $message
      */
-    function __construct($code, $server_response = null, $message = null) {
-      if(empty($message)) {
-        if(isset($this->http_codes[$code])) {
-          $message = 'HTTP error ' . $code . ': ' . $this->http_codes[$code];
+    public function __construct($http_code, $server_response = null, $request_time = null, $message = null)
+    {
+      $this->http_code = $http_code;
+
+      if ($server_response && substr($server_response, 0, 1) === '{') {
+        $this->server_response = json_decode($server_response, true);
+      } else {
+        $this->server_response = $server_response;
+      }
+
+      $this->request_time = $request_time;
+
+      if (empty($message)) {
+        if (isset($this->http_codes[$http_code])) {
+          $message = 'HTTP error ' . $http_code . ': ' . $this->http_codes[$http_code];
         } else {
           $message = 'Unknown HTTP error';
-        } // if
-      } // if
+        }
+      }
 
       parent::__construct($message);
-    } // __construct
+    }
 
+    /**
+     * @var integer
+     */
+    private $http_code;
+
+    /**
+     * Return response code
+     *
+     * @return integer
+     */
+    public function getHttpCode()
+    {
+      return $this->http_code;
+    }
+
+    /**
+     * @var string
+     */
+    private $server_response;
+
+    /**
+     * Return server response
+     *
+     * @return integer
+     */
+    public function getServerResponse()
+    {
+      return $this->server_response;
+    }
+
+    /**
+     * @var float|null
+     */
+    private $request_time;
+
+    /**
+     * Return total request time
+     */
+    public function getRequestTime()
+    {
+      return $this->request_time;
+    }
   }

@@ -1,13 +1,11 @@
 <?php
 
-  require_once 'ActiveCollab/autoload.php';
+  require_once __DIR__.'/src/ActiveCollab/SDK/autoload.php';
 
-  use \ActiveCollab\Client as API;
-  use \ActiveCollab\Connectors\Curl as CurlConnector;
+  use \ActiveCollab\SDK\Client as API;
 
   API::setUrl('https://myaccount.manageprojects.com/api.php');
   API::setKey('MY-API-TOKEN');
-  API::setConnector(new CurlConnector);
 
   print '<pre>';
 
@@ -17,16 +15,16 @@
 
   print "Defined project templates:\n\n";
 
-  var_dump(API::call('projects/templates'));
+  var_dump(API::get('projects/templates'));
 
   print "Task creation example:\n\n";
 
-  var_dump(API::call('projects/65/tasks/add', null, array(
+  var_dump(API::post('projects/65/tasks', [
     'task[name]' => 'This is a task name',
     'task[assignee_id]' => 48,
-    'task[other_assignees]' => array(3, 1),
-  ), array(
+    'task[other_assignees]' => [ 3, 1 ],
+  ], [
     '/Library/WebServer/Documents/BZHI6GtCQAEEMz-.jpg-large.jpeg'
-  )));
+  ]));
 
   print '</pre>';

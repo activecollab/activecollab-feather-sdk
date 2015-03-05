@@ -1,15 +1,14 @@
 <?php
 
-  namespace ActiveCollab\Exceptions;
+  namespace ActiveCollab\SDK\Exceptions;
 
-  use ActiveCollab\Exception;
+  use ActiveCollab\SDK\Exception;
 
   /**
    * Exception thrown by the app
    */
-  class AppException extends Exception {
-
-    // Codes
+  class AppException extends Exception
+  {
     const BAD_REQUEST = 400;
     const UNAUTHORIZED = 401;
     const FORBIDDEN = 403;
@@ -22,19 +21,24 @@
     /**
      * Construct the new exception instance
      *
-     * @param integer $code
+     * @param integer $http_code
      * @param string $server_response
+     * @param float|null $request_time
      * @param string $message
      */
-    function __construct($code, $server_response = null, $message = null) {
-      if($server_response && substr($server_response, 0, 1) === '{') {
+    public function __construct($http_code, $server_response = null, $request_time = null, $message = null)
+    {
+      $this->http_code = $http_code;
+      $this->request_time = $request_time;
+
+      if ($server_response && substr($server_response, 0, 1) === '{') {
         $this->server_response = json_decode($server_response, true);
       } else {
         $this->server_response = $server_response;
-      } // if
+      }
 
-      if($message === null) {
-        switch($code) {
+      if ($message === null) {
+        switch ($http_code) {
           case self::BAD_REQUEST:
             $message = 'Bad Request';
             break;
@@ -61,17 +65,32 @@
             break;
           default:
             $message = 'Unknown HTTP error';
-        } // switch
+        }
 
-        if(is_array($this->server_response)) {
+        if (is_array($this->server_response)) {
           $message .= '. Error (' . $this->server_response['type'] . '): ' . $this->server_response['message'];
         } else {
           $message .= '. Error: ' . $this->server_response;
-        } // if
-      } // if
+        }
+      }
 
       parent::__construct($message);
-    } // __construct
+    }
+
+    /**
+     * @var integer
+     */
+    private $http_code;
+
+    /**
+     * Return response code
+     *
+     * @return integer
+     */
+    public function getHttpCode()
+    {
+      return $this->http_code;
+    }
 
     /**
      * Remember server response
@@ -85,8 +104,21 @@
      *
      * @return array|string|null
      */
-    function getServerResponse() {
+    public function getServerResponse()
+    {
       return $this->server_response;
-    } // getServerResponse
+    }
 
+    /**
+     * @var float|null
+     */
+    private $request_time;
+
+    /**
+     * Return total request time
+     */
+    public function getRequestTime()
+    {
+      return $this->request_time;
+    }
   }

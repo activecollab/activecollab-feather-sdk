@@ -2,9 +2,8 @@
     "name": "activecollab/activecollab-sdk",
     "type": "library",
     "description": "This is a simple PHP library that makes communication with activeCollab API easy",
-    "prefer-stable": true,
     "keywords": ["activecollab"],
-    "homepage": "https://www.activecollab.com/add-ons.html",
+    "homepage": "https://github.com/activecollab/activecollab-sdk",
     "license": "MIT",
     "authors": [
         {
@@ -13,11 +12,10 @@
         }
     ],
     "require": {
-
+      "php" : ">=5.4.0",
+      "ext-curl" : "*"
     },
     "autoload": {
-      "psr-0": {
-        "ActiveCollab": "/"
-      }
+      "psr-0": { "ActiveCollab\\SDK" : "src" }
     }
 }
