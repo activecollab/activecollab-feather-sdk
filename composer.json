@@ -1,8 +1,8 @@
 {
     "name": "activecollab/activecollab-feather-sdk",
     "type": "library",
-    "description": "This is a simple PHP library that makes communication with ActiveCollab Feather API easy",
-    "keywords": ["activecollab"],
+    "description": "This is a simple PHP library that makes communication with Active Collab API easy",
+    "keywords": ["activecollab", "api", "sdk"],
     "homepage": "https://github.com/activecollab/activecollab-feather-sdk",
     "license": "MIT",
     "authors": [

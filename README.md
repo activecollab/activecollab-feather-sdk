@@ -1,6 +1,6 @@
-# activeCollab SDK
+# Active Collab 5 SDK
 
-This is a simple PHP library that makes communication with [activeCollab API](https://www.activecollab.com/docs/manuals/developers/api) easy. 
+This is a simple PHP library that makes communication with [Active Collab API](https://labs.activecollab.com/nightly-activecollab-api/v1/authentication.html) easy.
 
 ## Installation
 
@@ -29,8 +29,7 @@ Now that you have API token and URL, you can test out this simple example:
 
   require_once 'vendor/autoload.php';
 
-  use \ActiveCollab\Client as API;
-  use \ActiveCollab\Exceptions\AppException;
+  use \ActiveCollab\SDK\Client as API;
 
   API::setUrl('MY-API-URL');
   
@@ -104,4 +103,4 @@ try {
 
 ``delete()`` method only requires ``command`` argument to be provided.
 
-For full list of available API command, please check [activeCollab API documentation](https://www.activecollab.com/docs/manuals/developers).
+For full list of available API command, please check [Active Collab API documentation](https://labs.activecollab.com/nightly-activecollab-api/v1/authentication.html).
