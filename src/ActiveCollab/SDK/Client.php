@@ -10,7 +10,7 @@
    */
   final class Client
   {
-    const VERSION = '5.0.0'; // API wrapper version
+    const VERSION = '2.0.0'; // API wrapper version
 
     /**
      * Return user agent string
@@ -19,7 +19,7 @@
      */
     public static function getUserAgent()
     {
-      return 'activeCollab API Wrapper; v' . self::VERSION;
+      return 'Active Collab API Wrapper; v' . self::VERSION;
     }
 
     // ---------------------------------------------------
@@ -182,10 +182,14 @@
       if ($response instanceof Response && $response->isJson()) {
         $json = $response->getJson();
 
-        if ($json['is_error']) {
-          $error = $json['error'];
-        } else {
+        if (is_array($json) && !empty($json['is_ok']) && !empty($json['token'])) {
           return $json['token'];
+        } else {
+          if (empty($json['error'])) {
+            return 'Invalid response';
+          } else {
+            return $json['error'];
+          }
         }
       }
 
