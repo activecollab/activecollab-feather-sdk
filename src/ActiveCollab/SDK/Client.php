@@ -10,7 +10,7 @@
    */
   final class Client
   {
-    const VERSION = '2.0.0'; // API wrapper version
+    const VERSION = '2.0.2'; // API wrapper version
 
     /**
      * Return user agent string
