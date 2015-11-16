@@ -103,4 +103,4 @@ try {
 
 ``delete()`` method only requires ``command`` argument to be provided.
 
-For full list of available API command, please check [Active Collab API documentation](https://labs.activecollab.com/nightly-activecollab-api/v1/authentication.html).
+For full list of available API command, please check [Active Collab API documentation](https://labs.activecollab.com/nightly-activecollab-api/).
