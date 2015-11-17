@@ -9,7 +9,7 @@ If you choose to install this application with Composer instead of pulling down 
 ```json
 {
     "require": {
-        "activecollab/activecollab-feather-sdk": "^2.0"
+        "activecollab/activecollab-feather-sdk": "~2.0"
     }
 }
 ```
