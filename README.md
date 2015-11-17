@@ -19,10 +19,10 @@ Run a ``composer update`` to install the package.
 ## First Connection
 
 In order to connect, you will need API URL and API token. 
-The MY-API-URL is the activeCollab base url without /api/ or api.php suffix.
+The `MY-API-URL` is the activeCollab base url without `/api/` or `api.php` suffix.
 
-For every API call API::setKey must be called.
-Create an API key for your application by calling API::issueToken once:
+For every API call `API::setKey()` must be called.
+Create an API key for your application by calling `API::issueToken()` once:
 
 ```php
 <?php
@@ -50,7 +50,7 @@ Create an API key for your application by calling API::issueToken once:
 
 This example will contact activeCollab and ask for application and user info. Response is a simple associative array with a lot of details about the system that you are communicating with.
 
-# Making API Calls
+## Making API Calls
 
 Listing all tasks in project #65 is easy. Just call:
 
