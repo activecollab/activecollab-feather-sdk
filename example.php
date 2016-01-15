@@ -4,7 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use \ActiveCollab\SDK\Client as API;
 
-API::setUrl('https://myaccount.manageprojects.com/api.php');
+API::setUrl('https://company.com/projects/api.php');
 API::setKey('MY-API-TOKEN');
 
 print '<pre>';

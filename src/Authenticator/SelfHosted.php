@@ -8,11 +8,16 @@
 
 namespace ActiveCollab\SDK\Authenticator;
 
-use ActiveCollab\SDK\Authenticator;
-
 /**
  * @package ActiveCollab\SDK
  */
 class SelfHosted extends Authenticator
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function issueToken(...$arguments)
+    {
+
+    }
 }
