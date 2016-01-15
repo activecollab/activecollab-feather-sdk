@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * This file is part of the Active Collab project.
+ *
+ * (c) A51 doo <info@activecollab.com>. All rights reserved.
+ */
+
 namespace ActiveCollab\SDK;
 
 use ActiveCollab\SDK\Exceptions\AppException;
@@ -8,15 +14,10 @@ use ActiveCollab\SDK\Exceptions\CallFailed;
 /**
  * Connector makes requests and returns API responses.
  */
-final class Connector
+class Connector implements ConnectorInterface
 {
     /**
-     * GET data.
-     *
-     * @param string     $url
-     * @param array|null $headers
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function get($url, $headers = null)
     {
@@ -26,14 +27,7 @@ final class Connector
     }
 
     /**
-     * POST data.
-     *
-     * @param string     $url
-     * @param array|null $headers
-     * @param array      $post_data
-     * @param array      $files
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function post($url, $headers = null, $post_data = null, $files = null)
     {
@@ -84,13 +78,7 @@ final class Connector
     }
 
     /**
-     * Send a PUT request.
-     *
-     * @param string     $url
-     * @param array|null $headers
-     * @param array      $put_data
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function put($url, $headers = null, $put_data = null)
     {
@@ -114,13 +102,7 @@ final class Connector
     }
 
     /**
-     * Send a DELETE request.
-     *
-     * @param string     $url
-     * @param array|null $headers
-     * @param array      $delete_data
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function delete($url, $headers = null, $delete_data = null)
     {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Active Collab.
+ * This file is part of the Active Collab project.
  *
  * (c) A51 doo <info@activecollab.com>. All rights reserved.
  */
@@ -47,4 +47,4 @@ return (new Symfony\CS\Config\Config('psr2'))->fixers([
     '-print_to_echo',
     '-concat_without_spaces',
     '-empty_return',
-])->finder((new Symfony\CS\Finder\DefaultFinder)->in([__DIR__ . '/activecollab/current', __DIR__  . '/public', __DIR__ . '/tests/phpunit']));
+])->finder((new Symfony\CS\Finder\DefaultFinder())->in([__DIR__ . '/src']));

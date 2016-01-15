@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * This file is part of the Active Collab project.
+ *
+ * (c) A51 doo <info@activecollab.com>. All rights reserved.
+ */
+
 namespace ActiveCollab\SDK;
 
 use ActiveCollab\SDK\Exceptions\FileNotReadable;
@@ -8,14 +14,10 @@ use ActiveCollab\SDK\Exceptions\IssueTokenException;
 /**
  * activeCollab API client.
  */
-final class Client
+class Client implements ClientInterface
 {
-    const VERSION = '2.0.0'; // API wrapper version
-
     /**
-     * Return user agent string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public static function getUserAgent()
     {
@@ -34,11 +36,7 @@ final class Client
     private static $info_response = false;
 
     /**
-     * Return info.
-     *
-     * @param string|bool $property
-     *
-     * @return bool|null|string
+     * {@inheritdoc}
      */
     public static function info($property = false)
     {
@@ -65,9 +63,7 @@ final class Client
     private static $url;
 
     /**
-     * Return API URL.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public static function getUrl()
     {
@@ -75,9 +71,7 @@ final class Client
     }
 
     /**
-     * Set API URL.
-     *
-     * @param string $value
+     * {@inheritdoc}
      */
     public static function setUrl($value)
     {
@@ -92,9 +86,7 @@ final class Client
     private static $api_version = 1;
 
     /**
-     * Return API version.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public static function getApiVersion()
     {
@@ -102,9 +94,7 @@ final class Client
     }
 
     /**
-     * Set API version.
-     *
-     * @param int $version
+     * {@inheritdoc}
      */
     public static function setApiVersion($version)
     {
@@ -119,9 +109,7 @@ final class Client
     private static $key;
 
     /**
-     * Return API key.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public static function getKey()
     {
@@ -129,9 +117,7 @@ final class Client
     }
 
     /**
-     * Set API key.
-     *
-     * @param string $value
+     * {@inheritdoc}
      */
     public static function setKey($value)
     {
@@ -146,9 +132,7 @@ final class Client
     private static $connector;
 
     /**
-     * Return connector instance.
-     *
-     * @return Connector
+     * {@inheritdoc}
      */
     public static function &getConnector()
     {
@@ -160,15 +144,7 @@ final class Client
     }
 
     /**
-     * @param string $email_or_username
-     * @param string $password
-     * @param string $client_name
-     * @param string $client_vendor
-     * @param bool   $read_only
-     *
-     * @return string
-     *
-     * @throws Exceptions\IssueTokenException
+     * {@inheritdoc}
      */
     public static function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false)
     {
@@ -200,11 +176,7 @@ final class Client
     }
 
     /**
-     * Send a get request.
-     *
-     * @param string $path
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public static function get($path)
     {
@@ -212,13 +184,7 @@ final class Client
     }
 
     /**
-     * Send a POST request.
-     *
-     * @param string     $path
-     * @param array|null $params
-     * @param array|null $attachments
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public static function post($path, $params = null, $attachments = null)
     {
@@ -226,12 +192,7 @@ final class Client
     }
 
     /**
-     * Send a PUT request.
-     *
-     * @param string     $path
-     * @param array|null $params
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public static function put($path, $params = null)
     {
@@ -239,12 +200,7 @@ final class Client
     }
 
     /**
-     * Send a delete command.
-     *
-     * @param string     $path
-     * @param array|null $params
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public static function delete($path, $params = null)
     {

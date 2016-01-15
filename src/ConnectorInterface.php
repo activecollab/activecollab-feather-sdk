@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * This file is part of the Active Collab project.
+ *
+ * (c) A51 doo <info@activecollab.com>. All rights reserved.
+ */
+
 namespace ActiveCollab\SDK;
 
 /**
@@ -13,7 +19,7 @@ interface ConnectorInterface
      * @param string     $url
      * @param array|null $headers
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function get($url, $headers = null);
 
@@ -25,7 +31,7 @@ interface ConnectorInterface
      * @param array      $post_data
      * @param array      $files
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function post($url, $headers = null, $post_data = null, $files = null);
 
@@ -36,7 +42,7 @@ interface ConnectorInterface
      * @param array|null $headers
      * @param array      $put_data
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function put($url, $headers = null, $put_data = null);
 
@@ -47,7 +53,7 @@ interface ConnectorInterface
      * @param array|null $headers
      * @param array      $delete_data
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function delete($url, $headers = null, $delete_data = null);
 }
