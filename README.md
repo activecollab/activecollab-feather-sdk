@@ -9,7 +9,7 @@ If you choose to install this application with Composer instead of pulling down 
 ```json
 {
     "require": {
-        "activecollab/activecollab-sdk": "~2.0"
+        "activecollab/activecollab-feather-sdk": "~2.0"
     }
 }
 ```
@@ -19,10 +19,10 @@ Run a ``composer update`` to install the package.
 ## First Connection
 
 In order to connect, you will need API URL and API token. 
+The `MY-API-URL` is the activeCollab base url without `/api/` or `api.php` suffix.
 
-To get these details, go to your user profile in your activeCollab and select **API Subscriptions** from **Options** drop-down. Click on **New Subscription** button and fill the form (client name is name of your app that will communicate with activeCollab via API). After you create API subscription for your application, click on the magnifier glass icon to open a dialog that will show you API URL and token for that subscription.
-
-Now that you have API token and URL, you can test out this simple example:
+For every API call `API::setKey()` must be called.
+Create an API key for your application by calling `API::issueToken()` once:
 
 ```php
 <?php
@@ -50,7 +50,7 @@ Now that you have API token and URL, you can test out this simple example:
 
 This example will contact activeCollab and ask for application and user info. Response is a simple associative array with a lot of details about the system that you are communicating with.
 
-# Making API Calls
+## Making API Calls
 
 Listing all tasks in project #65 is easy. Just call:
 
@@ -103,4 +103,4 @@ try {
 
 ``delete()`` method only requires ``command`` argument to be provided.
 
-For full list of available API command, please check [Active Collab API documentation](https://labs.activecollab.com/nightly-activecollab-api/v1/authentication.html).
+For full list of available API command, please check [Active Collab API documentation](https://labs.activecollab.com/nightly-activecollab-api/).
