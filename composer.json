@@ -19,6 +19,8 @@
         "fabpot/php-cs-fixer": "~1.0"
     },
     "autoload": {
-      "psr-4": { "ActiveCollab\\SDK" : "src" }
+        "psr-4": {
+            "ActiveCollab\\SDK\\" : "src"
+        }
     }
 }
