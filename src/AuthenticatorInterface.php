@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Active Collab project.
+ * This library is free software, and it is part of the Active Collab SDK project. Check LICENSE for details.
  *
- * (c) A51 doo <info@activecollab.com>. All rights reserved.
+ * (c) A51 doo <info@activecollab.com>
  */
 
 namespace ActiveCollab\SDK;
@@ -58,8 +58,8 @@ interface AuthenticatorInterface
     public function &setPassword($value);
 
     /**
-     * @param  mixed[] ...$arguments
-     * @return mixed
+     * @param  mixed[]        ...$arguments
+     * @return TokenInterface
      */
     public function issueToken(...$arguments);
 }

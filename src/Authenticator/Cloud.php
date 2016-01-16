@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Active Collab project.
+ * This library is free software, and it is part of the Active Collab SDK project. Check LICENSE for details.
  *
- * (c) A51 doo <info@activecollab.com>. All rights reserved.
+ * (c) A51 doo <info@activecollab.com>
  */
 
 namespace ActiveCollab\SDK\Authenticator;
@@ -11,8 +11,8 @@ namespace ActiveCollab\SDK\Authenticator;
 use ActiveCollab\SDK\Connector;
 use ActiveCollab\SDK\Exceptions\IssueTokenException;
 use ActiveCollab\SDK\Exceptions\ListAccounts;
+use ActiveCollab\SDK\Token;
 use InvalidArgumentException;
-use LogicException;
 
 /**
  * @package ActiveCollab\SDK
@@ -113,7 +113,7 @@ class Cloud extends Authenticator
             throw new InvalidArgumentException("Account #{$account_id} not loaded");
         } else {
             $connector = new Connector();
-            $response = $connector->post('https://my.activecollab.com/api/v1/external/login', null, [
+            $response = $connector->post('https://app.activecollab.com/' . $account_id . '/api/v1/issue-token-intent', null, [
                 'client_vendor' => $this->getYourOrgName(),
                 'client_name' => $this->getYourAppName(),
                 'intent' => $intent,
@@ -125,7 +125,7 @@ class Cloud extends Authenticator
                 if (empty($result['is_ok']) || empty($result['token'])) {
                     throw new IssueTokenException(0);
                 } else {
-                    return new Token($this->accounts[$account_id]['url'], $result['token']);
+                    return new Token($result['token'], $this->accounts[$account_id]['url']);
                 }
             } else {
                 throw new IssueTokenException(0);
@@ -181,7 +181,6 @@ class Cloud extends Authenticator
                                     'url' => $account['url'],
                                 ];
                             } else {
-
                             }
                         }
                     }
