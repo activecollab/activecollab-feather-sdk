@@ -19,6 +19,14 @@ class Connector implements ConnectorInterface
     /**
      * {@inheritdoc}
      */
+    public function getUserAgent()
+    {
+        return 'Active Collab API Wrapper; v' . Client::VERSION;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function get($url, $headers = null)
     {
         $http = $this->getHandle($url, $headers);
@@ -137,7 +145,7 @@ class Connector implements ConnectorInterface
     {
         $http = curl_init();
 
-        curl_setopt($http, CURLOPT_USERAGENT, Client::getUserAgent());
+        curl_setopt($http, CURLOPT_USERAGENT, $this->getUserAgent());
         curl_setopt($http, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($http, CURLINFO_HEADER_OUT, true);
         curl_setopt($http, CURLOPT_URL, $url);

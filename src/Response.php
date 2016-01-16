@@ -8,6 +8,8 @@
 
 namespace ActiveCollab\SDK;
 
+use RuntimeException;
+
 /**
  * Abstract result.
  */
@@ -75,11 +77,25 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Cached JSON data.
+     * Flag whether we have a JSON response or not.
      *
      * @var mixed
      */
-    private $is_json = null, $json_loaded = false, $json = null;
+    private $is_json = null;
+
+    /**
+     * Flag whether JSON was parsed or not.
+     *
+     * @var bool
+     */
+    private $json_loaded = false;
+
+    /**
+     * Parsed JSON data.
+     *
+     * @var array|null
+     */
+    private $json = null;
 
     /**
      * Return true if response is JSON.
@@ -105,6 +121,10 @@ class Response implements ResponseInterface
         if (empty($this->json_loaded)) {
             if ($this->getBody() && $this->isJson()) {
                 $this->json = json_decode($this->getBody(), true);
+
+                if (json_last_error()) {
+                    throw new RuntimeException('Failed to parse JSON. Reason: ' . json_last_error_msg());
+                }
             }
 
             $this->json_loaded = true;

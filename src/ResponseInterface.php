@@ -14,6 +14,20 @@ namespace ActiveCollab\SDK;
 interface ResponseInterface
 {
     /**
+     * Return HTTP code.
+     *
+     * @return int
+     */
+    public function getHttpCode();
+
+    /**
+     * Return content type.
+     *
+     * @return string
+     */
+    public function getContentType();
+
+    /**
      * Return raw response body.
      *
      * @return string
@@ -33,18 +47,4 @@ interface ResponseInterface
      * @return mixed
      */
     public function getJson();
-
-    /**
-     * Return content type.
-     *
-     * @return string
-     */
-    public function getContentType();
-
-    /**
-     * Return HTTP code.
-     *
-     * @return int
-     */
-    public function getHttpCode();
 }

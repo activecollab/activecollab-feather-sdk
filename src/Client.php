@@ -48,14 +48,6 @@ class Client implements ClientInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserAgent()
-    {
-        return 'Active Collab API Wrapper; v' . self::VERSION;
-    }
-
     // ---------------------------------------------------
     //  Info
     // ---------------------------------------------------

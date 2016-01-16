@@ -14,6 +14,13 @@ namespace ActiveCollab\SDK;
 interface ConnectorInterface
 {
     /**
+     * Return user agent string.
+     *
+     * @return string
+     */
+    public function getUserAgent();
+
+    /**
      * GET data.
      *
      * @param string     $url

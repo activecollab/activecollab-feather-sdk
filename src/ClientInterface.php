@@ -16,13 +16,6 @@ interface ClientInterface
     const VERSION = '3.0.0';
 
     /**
-     * Return user agent string.
-     *
-     * @return string
-     */
-    public function getUserAgent();
-
-    /**
      * Return info.
      *
      * @param string|bool $property
