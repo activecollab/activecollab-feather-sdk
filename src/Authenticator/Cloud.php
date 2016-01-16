@@ -9,8 +9,10 @@
 namespace ActiveCollab\SDK\Authenticator;
 
 use ActiveCollab\SDK\Connector;
+use ActiveCollab\SDK\Exceptions\Authentication;
 use ActiveCollab\SDK\Exceptions\IssueTokenException;
 use ActiveCollab\SDK\Exceptions\ListAccounts;
+use ActiveCollab\SDK\ResponseInterface;
 use ActiveCollab\SDK\Token;
 use InvalidArgumentException;
 
@@ -68,6 +70,8 @@ class Cloud extends Authenticator
     private $user;
 
     /**
+     * Return user information (first name, last name and avatar URL).
+     *
      * @return array
      */
     public function getUser()
@@ -107,28 +111,27 @@ class Cloud extends Authenticator
 
         $intent = $this->getIntent();
 
-        $account_id = $arguments[0];
+        $account_id = (integer) $arguments[0];
 
         if (empty($this->accounts[$account_id])) {
             throw new InvalidArgumentException("Account #{$account_id} not loaded");
         } else {
-            $connector = new Connector();
-            $response = $connector->post('https://app.activecollab.com/' . $account_id . '/api/v1/issue-token-intent', null, [
+            $response = (new Connector())->post('https://app.activecollab.com/' . $account_id . '/api/v1/issue-token-intent', null, [
                 'client_vendor' => $this->getYourOrgName(),
                 'client_name' => $this->getYourAppName(),
                 'intent' => $intent,
             ]);
 
-            if ($response->isJson()) {
+            if ($response instanceof ResponseInterface && $response->isJson()) {
                 $result = $response->getJson();
 
                 if (empty($result['is_ok']) || empty($result['token'])) {
-                    throw new IssueTokenException(0);
+                    throw new Authentication('Authentication rejected');
                 } else {
                     return new Token($result['token'], $this->accounts[$account_id]['url']);
                 }
             } else {
-                throw new IssueTokenException(0);
+                throw new Authentication('Invalid response');
             }
         }
     }
@@ -148,13 +151,12 @@ class Cloud extends Authenticator
                 throw new IssueTokenException(0);
             }
 
-            $connector = new Connector();
-            $response = $connector->post('https://my.activecollab.com/api/v1/external/login', null, [
+            $response = (new Connector())->post('https://my.activecollab.com/api/v1/external/login', null, [
                 'email' => $this->getEmailAddress(),
                 'password' => $this->getPassword(),
             ]);
 
-            if ($response->isJson()) {
+            if ($response instanceof ResponseInterface && $response->isJson()) {
                 $result = $response->getJson();
 
                 if (empty($result['is_ok'])) {
@@ -180,7 +182,6 @@ class Cloud extends Authenticator
                                     'name' => $account['display_name'],
                                     'url' => $account['url'],
                                 ];
-                            } else {
                             }
                         }
                     }
@@ -190,7 +191,7 @@ class Cloud extends Authenticator
                     $this->user = $result['user'];
                 }
             } else {
-                throw new IssueTokenException(0);
+                throw new Authentication('Invalid response');
             }
         }
     }
