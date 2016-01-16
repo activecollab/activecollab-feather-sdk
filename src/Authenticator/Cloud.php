@@ -10,7 +10,6 @@ namespace ActiveCollab\SDK\Authenticator;
 
 use ActiveCollab\SDK\Connector;
 use ActiveCollab\SDK\Exceptions\Authentication;
-use ActiveCollab\SDK\Exceptions\IssueTokenException;
 use ActiveCollab\SDK\Exceptions\ListAccounts;
 use ActiveCollab\SDK\ResponseInterface;
 use InvalidArgumentException;
@@ -131,8 +130,6 @@ class Cloud extends Authenticator
 
     /**
      * Load account and user details from Active Collab ID.
-     *
-     * @throws IssueTokenException
      */
     private function loadAccountsAndUser()
     {
@@ -141,7 +138,7 @@ class Cloud extends Authenticator
             $password = $this->getPassword();
 
             if (empty($email_address) || empty($password)) {
-                throw new IssueTokenException(0);
+                throw new Authentication('Email address and password are required');
             }
 
             $response = (new Connector())->post('https://my.activecollab.com/api/v1/external/login', null, [

@@ -53,19 +53,6 @@ interface ClientInterface
     public function &getConnector();
 
     /**
-     * @param string $email_or_username
-     * @param string $password
-     * @param string $client_name
-     * @param string $client_vendor
-     * @param bool   $read_only
-     *
-     * @return string
-     *
-     * @throws Exceptions\IssueTokenException
-     */
-    public function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false);
-
-    /**
      * Send a get request.
      *
      * @param string $path

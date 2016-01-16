@@ -9,7 +9,6 @@
 namespace ActiveCollab\SDK;
 
 use ActiveCollab\SDK\Exceptions\FileNotReadable;
-use ActiveCollab\SDK\Exceptions\IssueTokenException;
 use InvalidArgumentException;
 
 /**
@@ -120,38 +119,6 @@ class Client implements ClientInterface
         }
 
         return $this->connector;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false)
-    {
-        $response = $this->getConnector()->post($this->prepareUrl('issue-token'), [], $this->prepareParams([
-            'username' => $email_or_username,
-            'password' => $password,
-            'client_name' => $client_name,
-            'client_vendor' => $client_vendor,
-            'read_only' => $read_only,
-        ]));
-
-        $error = 0;
-
-        if ($response instanceof Response && $response->isJson()) {
-            $json = $response->getJson();
-
-            if (is_array($json) && !empty($json['is_ok']) && !empty($json['token'])) {
-                return $json['token'];
-            } else {
-                if (empty($json['error'])) {
-                    return 'Invalid response';
-                } else {
-                    return $json['error'];
-                }
-            }
-        }
-
-        throw new IssueTokenException($error);
     }
 
     /**
