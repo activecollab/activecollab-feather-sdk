@@ -13,14 +13,14 @@ namespace ActiveCollab\SDK;
  */
 interface ClientInterface
 {
-    const VERSION = '2.0.0';
+    const VERSION = '3.0.0';
 
     /**
      * Return user agent string.
      *
      * @return string
      */
-    public static function getUserAgent();
+    public function getUserAgent();
 
     /**
      * Return info.
@@ -29,56 +29,35 @@ interface ClientInterface
      *
      * @return bool|null|string
      */
-    public static function info($property = false);
+    public function info($property = false);
 
     /**
      * Return API URL.
      *
      * @return string
      */
-    public static function getUrl();
+    public function getUrl();
 
     /**
-     * Set API URL.
+     * Return API token.
      *
-     * @param string $value
+     * @return string
      */
-    public static function setUrl($value);
+    public function getToken();
 
     /**
      * Return API version.
      *
      * @return int
      */
-    public static function getApiVersion();
-
-    /**
-     * Set API version.
-     *
-     * @param int $version
-     */
-    public static function setApiVersion($version);
-
-    /**
-     * Return API key.
-     *
-     * @return string
-     */
-    public static function getKey();
-
-    /**
-     * Set API key.
-     *
-     * @param string $value
-     */
-    public static function setKey($value);
+    public function getApiVersion();
 
     /**
      * Return connector instance.
      *
      * @return Connector
      */
-    public static function &getConnector();
+    public function &getConnector();
 
     /**
      * @param string $email_or_username
@@ -91,7 +70,7 @@ interface ClientInterface
      *
      * @throws Exceptions\IssueTokenException
      */
-    public static function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false);
+    public function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false);
 
     /**
      * Send a get request.
@@ -100,7 +79,7 @@ interface ClientInterface
      *
      * @return Response
      */
-    public static function get($path);
+    public function get($path);
 
     /**
      * Send a POST request.
@@ -111,7 +90,7 @@ interface ClientInterface
      *
      * @return Response
      */
-    public static function post($path, $params = null, $attachments = null);
+    public function post($path, $params = null, $attachments = null);
 
     /**
      * Send a PUT request.
@@ -121,7 +100,7 @@ interface ClientInterface
      *
      * @return Response
      */
-    public static function put($path, $params = null);
+    public function put($path, $params = null);
 
     /**
      * Send a delete command.
@@ -131,5 +110,5 @@ interface ClientInterface
      *
      * @return Response
      */
-    public static function delete($path, $params = null);
+    public function delete($path, $params = null);
 }

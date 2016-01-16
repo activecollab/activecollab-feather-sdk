@@ -10,6 +10,7 @@ namespace ActiveCollab\SDK;
 
 use ActiveCollab\SDK\Exceptions\FileNotReadable;
 use ActiveCollab\SDK\Exceptions\IssueTokenException;
+use InvalidArgumentException;
 
 /**
  * activeCollab API client.
@@ -17,11 +18,42 @@ use ActiveCollab\SDK\Exceptions\IssueTokenException;
 class Client implements ClientInterface
 {
     /**
+     * @var TokenInterface
+     */
+    private $token;
+
+    /**
+     * API version.
+     *
+     * @var int
+     */
+    private $api_version = 1;
+
+    /**
+     * Client constructor.
+     *
+     * @param TokenInterface $token
+     * @param int|null       $api_version
+     */
+    public function __construct(TokenInterface $token, $api_version = null)
+    {
+        $this->token = $token;
+
+        if ($api_version !== null) {
+            if (is_int($api_version) && $api_version > 0) {
+                $this->api_version = $api_version;
+            } else {
+                throw new InvalidArgumentException('API version is expected to be a number');
+            }
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public static function getUserAgent()
+    public function getUserAgent()
     {
-        return 'Active Collab API Wrapper; v'.self::VERSION;
+        return 'Active Collab API Wrapper; v' . self::VERSION;
     }
 
     // ---------------------------------------------------
@@ -33,21 +65,21 @@ class Client implements ClientInterface
      *
      * @var bool
      */
-    private static $info_response = false;
+    private $info_response = false;
 
     /**
      * {@inheritdoc}
      */
-    public static function info($property = false)
+    public function info($property = false)
     {
-        if (self::$info_response === false) {
-            self::$info_response = self::get('info')->getJson();
+        if ($this->info_response === false) {
+            $this->info_response = $this->get('info')->getJson();
         }
 
         if ($property) {
-            return isset(self::$info_response[$property]) && self::$info_response[$property] ? self::$info_response[$property] : null;
+            return isset($this->info_response[$property]) && $this->info_response[$property] ? $this->info_response[$property] : null;
         } else {
-            return self::$info_response;
+            return $this->info_response;
         }
     }
 
@@ -56,72 +88,27 @@ class Client implements ClientInterface
     // ---------------------------------------------------
 
     /**
-     * API URL.
-     *
-     * @var string
-     */
-    private static $url;
-
-    /**
      * {@inheritdoc}
      */
-    public static function getUrl()
+    public function getToken()
     {
-        return self::$url;
+        return $this->token->getToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function setUrl($value)
+    public function getUrl()
     {
-        self::$url = $value;
-    }
-
-    /**
-     * API version.
-     *
-     * @var int
-     */
-    private static $api_version = 1;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getApiVersion()
-    {
-        return self::$api_version;
+        return $this->token->getUrl();
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function setApiVersion($version)
+    public function getApiVersion()
     {
-        self::$api_version = (integer) $version;
-    }
-
-    /**
-     * API key.
-     *
-     * @var string
-     */
-    private static $key;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getKey()
-    {
-        return self::$key;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function setKey($value)
-    {
-        self::$key = $value;
+        return $this->api_version;
     }
 
     /**
@@ -129,26 +116,26 @@ class Client implements ClientInterface
      *
      * @var \ActiveCollab\SDK\Connector
      */
-    private static $connector;
+    private $connector;
 
     /**
      * {@inheritdoc}
      */
-    public static function &getConnector()
+    public function &getConnector()
     {
-        if (empty(self::$connector)) {
-            self::$connector = new Connector();
+        if (empty($this->connector)) {
+            $this->connector = new Connector();
         }
 
-        return self::$connector;
+        return $this->connector;
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false)
+    public function issueToken($email_or_username, $password, $client_name, $client_vendor, $read_only = false)
     {
-        $response = self::getConnector()->post(self::prepareUrl('issue-token'), [], self::prepareParams([
+        $response = $this->getConnector()->post($this->prepareUrl('issue-token'), [], $this->prepareParams([
             'username' => $email_or_username,
             'password' => $password,
             'client_name' => $client_name,
@@ -178,33 +165,33 @@ class Client implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public static function get($path)
+    public function get($path)
     {
-        return self::getConnector()->get(self::prepareUrl($path), self::prepareHeaders());
+        return $this->getConnector()->get($this->prepareUrl($path), $this->prepareHeaders());
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function post($path, $params = null, $attachments = null)
+    public function post($path, $params = null, $attachments = null)
     {
-        return self::getConnector()->post(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params), self::prepareAttachments($attachments));
+        return $this->getConnector()->post($this->prepareUrl($path), $this->prepareHeaders(), $this->prepareParams($params), $this->prepareAttachments($attachments));
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function put($path, $params = null)
+    public function put($path, $params = null)
     {
-        return self::getConnector()->put(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params));
+        return $this->getConnector()->put($this->prepareUrl($path), $this->prepareHeaders(), $this->prepareParams($params));
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function delete($path, $params = null)
+    public function delete($path, $params = null)
     {
-        return self::getConnector()->delete(self::prepareUrl($path), self::prepareHeaders(), self::prepareParams($params));
+        return $this->getConnector()->delete($this->prepareUrl($path), $this->prepareHeaders(), $this->prepareParams($params));
     }
 
     /**
@@ -212,9 +199,9 @@ class Client implements ClientInterface
      *
      * @return array
      */
-    private static function prepareHeaders()
+    private function prepareHeaders()
     {
-        return ['X-Angie-AuthApiToken: '.self::getKey()];
+        return ['X-Angie-AuthApiToken: ' . $this->getToken()];
     }
 
     /**
@@ -224,19 +211,19 @@ class Client implements ClientInterface
      *
      * @return string
      */
-    private static function prepareUrl($path)
+    private function prepareUrl($path)
     {
         $bits = parse_url($path);
 
         $path = isset($bits['path']) && $bits['path'] ? $bits['path'] : '/';
 
         if (substr($path, 0, 1) !== '/') {
-            $path = '/'.$path;
+            $path = '/' . $path;
         }
 
-        $query = isset($bits['query']) && $bits['query'] ? '?'.$bits['query'] : '';
+        $query = isset($bits['query']) && $bits['query'] ? '?' . $bits['query'] : '';
 
-        return self::getUrl().'/api/v'.self::getApiVersion().$path.$query;
+        return $this->getUrl() . '/api/v' . $this->getApiVersion() . $path . $query;
     }
 
     /**
@@ -246,7 +233,7 @@ class Client implements ClientInterface
      *
      * @return array
      */
-    private static function prepareParams($params)
+    private function prepareParams($params)
     {
         return empty($params) ? [] : $params;
     }
@@ -260,7 +247,7 @@ class Client implements ClientInterface
      *
      * @throws Exceptions\FileNotReadable
      */
-    private static function prepareAttachments($attachments = null)
+    private function prepareAttachments($attachments = null)
     {
         $file_params = [];
 
