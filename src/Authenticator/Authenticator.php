@@ -9,6 +9,9 @@
 namespace ActiveCollab\SDK\Authenticator;
 
 use ActiveCollab\SDK\AuthenticatorInterface;
+use ActiveCollab\SDK\Exceptions\Authentication;
+use ActiveCollab\SDK\ResponseInterface;
+use ActiveCollab\SDK\Token;
 use InvalidArgumentException;
 
 /**
@@ -118,5 +121,22 @@ abstract class Authenticator implements AuthenticatorInterface
         $this->password = $value;
 
         return $this;
+    }
+
+    /**
+     * @param  ResponseInterface $response
+     * @param  string            $url
+     * @return Token
+     * @throws Authentication
+     */
+    protected function issueTokenResponseToToken(ResponseInterface $response, $url)
+    {
+        $result = $response->getJson();
+
+        if (empty($result['is_ok']) || empty($result['token'])) {
+            throw new Authentication('Authentication rejected');
+        } else {
+            return new Token($result['token'], $url);
+        }
     }
 }

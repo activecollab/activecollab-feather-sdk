@@ -13,7 +13,6 @@ use ActiveCollab\SDK\Exceptions\Authentication;
 use ActiveCollab\SDK\Exceptions\IssueTokenException;
 use ActiveCollab\SDK\Exceptions\ListAccounts;
 use ActiveCollab\SDK\ResponseInterface;
-use ActiveCollab\SDK\Token;
 use InvalidArgumentException;
 
 /**
@@ -123,13 +122,7 @@ class Cloud extends Authenticator
             ]);
 
             if ($response instanceof ResponseInterface && $response->isJson()) {
-                $result = $response->getJson();
-
-                if (empty($result['is_ok']) || empty($result['token'])) {
-                    throw new Authentication('Authentication rejected');
-                } else {
-                    return new Token($result['token'], $this->accounts[$account_id]['url']);
-                }
+                return $this->issueTokenResponseToToken($response, $this->accounts[$account_id]['url']);
             } else {
                 throw new Authentication('Invalid response');
             }
