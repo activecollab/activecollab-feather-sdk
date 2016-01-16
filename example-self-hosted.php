@@ -8,7 +8,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Construct a self-hosted authenticator. Last parameter is URL where your Active Collab is installed
+// Construct a self-hosted authenticator. Last parameter is URL where your Active Collab
 $authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/projects');
 
 // Issue a token

@@ -14,7 +14,9 @@ If you choose to install this application with Composer instead of pulling down 
 }
 ```
     
-Run a ``composer update`` to install the package.
+Run a `composer update` to install the package.
+
+*Note*: If you used an older version of Active Collab API wrapper and loaded it using `dev-master`, lock it to version 2.0 by setting require statement to `^2.0` and calling `composer update`.
 
 ## Connecting to Active Collab Cloud Accounts
 
