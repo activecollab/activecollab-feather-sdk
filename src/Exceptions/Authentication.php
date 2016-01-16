@@ -8,10 +8,12 @@
 
 namespace ActiveCollab\SDK\Exceptions;
 
+use ActiveCollab\SDK\Exception;
+
 /**
  * @package ActiveCollab\SDK\Exceptions
  */
-class ListAccounts extends Authentication
+class Authentication extends Exception
 {
     /**
      * @param string          $message
@@ -20,9 +22,9 @@ class ListAccounts extends Authentication
     public function __construct($message = null, $previous = null)
     {
         if (empty($message)) {
-            $message = 'Failed to list user accounts';
+            $message = 'Failed to authenticate';
         }
 
-        parent::__construct($message, $previous);
+        parent::__construct($message, 0, $previous);
     }
 }
