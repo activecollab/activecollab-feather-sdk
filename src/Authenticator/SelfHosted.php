@@ -8,6 +8,7 @@
 
 namespace ActiveCollab\SDK\Authenticator;
 
+use ActiveCollab\SDK\Authenticator;
 use ActiveCollab\SDK\Connector;
 use ActiveCollab\SDK\Exceptions\Authentication;
 use ActiveCollab\SDK\ResponseInterface;

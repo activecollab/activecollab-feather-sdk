@@ -6,12 +6,9 @@
  * (c) A51 doo <info@activecollab.com>
  */
 
-namespace ActiveCollab\SDK\Authenticator;
+namespace ActiveCollab\SDK;
 
-use ActiveCollab\SDK\AuthenticatorInterface;
 use ActiveCollab\SDK\Exceptions\Authentication;
-use ActiveCollab\SDK\ResponseInterface;
-use ActiveCollab\SDK\Token;
 use InvalidArgumentException;
 
 /**
