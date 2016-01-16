@@ -9,66 +9,88 @@ If you choose to install this application with Composer instead of pulling down 
 ```json
 {
     "require": {
-        "activecollab/activecollab-feather-sdk": "~2.0"
+        "activecollab/activecollab-feather-sdk": "^3.0"
     }
 }
 ```
     
 Run a ``composer update`` to install the package.
 
-## First Connection
-
-In order to connect, you will need API URL and API token. 
-The `MY-API-URL` is the activeCollab base url without `/api/` or `api.php` suffix.
-
-For every API call `API::setKey()` must be called.
-Create an API key for your application by calling `API::issueToken()` once:
+## Connecting to Active Collab Cloud Accounts
 
 ```php
 <?php
 
-  require_once 'vendor/autoload.php';
+require_once '/path/to/vendor/autoload.php';
 
-  use \ActiveCollab\SDK\Client as API;
+// Provide name of your company, name of the app that you are developing, your email address and password.
+$authenticator = new \ActiveCollab\SDK\Authenticator\Cloud('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember');
 
-  API::setUrl('MY-API-URL');
-  
-  // Use issueToken() method to get a new token. Store it for later use
-  try {
-    $token = API::issueToken('my@email.com', 'MY-PASSWORD', 'NAME-OF-MY-APP', 'NAME-OF-MY-COMPANY');
-  } catch (Exception $e) {
-    die($e->getMessage());
-  }
-  
-  // Set token before making calls
-  API::setKey($token);
+// Show all Active Collab 5 and up account that this user has access to.
+print_r($authenticator->getAccounts());
 
-  print '<pre>';
-  print_r(API::info());
-  print '</pre>';
+// Show user details (first name, last name and avatar URL).
+print_r($authenticator->getUser());
+
+// Issue a token for account #123456789.
+$token = $authenticator->issueToken(123456789);
+
+// Did we get it?
+if ($token instanceof \ActiveCollab\SDK\TokenInterface) {
+    print $token->getUrl() . "\n";
+    print $token->getToken() . "\n";
+} else {
+    print "Invalid response\n";
+    die();
+}
 ```
 
-This example will contact activeCollab and ask for application and user info. Response is a simple associative array with a lot of details about the system that you are communicating with.
+## Connecting to Self-Hosted Active Collab Accounts
 
-## Making API Calls
+```php
+require_once '/path/to/vendor/autoload.php';
+
+// Provide name of your company, name of the app that you are developing, your email address and password. Last parameter is URL where your Active Collab is installed.
+$authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/projects');
+
+// Issue a token.
+$token = $authenticator->issueToken();
+
+// Did we get what we asked for?
+if ($token instanceof \ActiveCollab\SDK\TokenInterface) {
+    print $token->getUrl() . "\n";
+    print $token->getToken() . "\n";
+} else {
+    print "Invalid response\n";
+    die();
+}
+```
+
+## Constructing a client instance
+
+Once we have our token, we can construct a client and make API calls:
+
+```php
+$client = new \ActiveCollab\SDK\Client($token);
+```
 
 Listing all tasks in project #65 is easy. Just call:
 
 ```php
-API::get('projects/65/tasks');
+$client->get('projects/65/tasks');
 ```
 
 To create a task, simply send a POST request:
 
 ```php
 try {
-  API::post('projects/65/tasks', [
-    'name' => 'This is a task name',
-    'assignee_id' => 48
-  ]);
+    $client->post('projects/65/tasks', [
+      'name' => 'This is a task name',
+      'assignee_id' => 48
+    ]);
 } catch(AppException $e) {
-  print $e->getMessage() . '<br><br>';
-  // var_dump($e->getServerResponse()); (need more info?)
+    print $e->getMessage() . '<br><br>';
+    // var_dump($e->getServerResponse()); (need more info?)
 }
 ```
 
@@ -76,12 +98,12 @@ To update a task, PUT request will be needed:
 
 ```php
 try {
-  API::put('projects/65/tasks/123', [
-    'name' => 'Updated named'
-  ]);
+    $client->put('projects/65/tasks/123', [
+        'name' => 'Updated named'
+    ]);
 } catch(AppException $e) {
-  print $e->getMessage() . '<br><br>';
-  // var_dump($e->getServerResponse()); (need more info?)
+    print $e->getMessage() . '<br><br>';
+    // var_dump($e->getServerResponse()); (need more info?)
 }
 ```
 
@@ -94,10 +116,10 @@ To remove a task, call:
 
 ```php
 try {
-  API::delete('projects/65/tasks/123');
+    $client->delete('projects/65/tasks/123');
 } catch(AppException $e) {
-  print $e->getMessage() . '<br><br>';
-  // var_dump($e->getServerResponse()); (need more info?)
+    print $e->getMessage() . '<br><br>';
+    // var_dump($e->getServerResponse()); (need more info?)
 }
 ```
 
