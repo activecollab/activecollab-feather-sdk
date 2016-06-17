@@ -72,7 +72,7 @@ if ($token instanceof \ActiveCollab\SDK\TokenInterface) {
 
 If curl complains that SSL peer verification has failed, you can turn it off like this::
 
-```
+```php
 // Cloud
 $authenticator = new \ActiveCollab\SDK\Authenticator\Cloud('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', false);
 $authenticator->setSslVerifyPeer(false);
