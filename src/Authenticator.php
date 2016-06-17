@@ -21,15 +21,20 @@ abstract class Authenticator implements AuthenticatorInterface
      * @param string $your_app_name
      * @param string $email_address
      * @param string $password
+     * @param bool   $ssl_verify_peer
      */
-    public function __construct($your_org_name, $your_app_name, $email_address, $password)
+    public function __construct($your_org_name, $your_app_name, $email_address, $password, $ssl_verify_peer = true)
     {
         $this->setYourOrgName($your_org_name);
         $this->setYourAppName($your_app_name);
         $this->setEmailAddress($email_address);
         $this->setPassword($password);
+        $this->setSslVerifyPeer($ssl_verify_peer);
     }
 
+    /**
+     * @var string
+     */
     private $your_org_name;
 
     /**
@@ -50,6 +55,9 @@ abstract class Authenticator implements AuthenticatorInterface
         return $this;
     }
 
+    /**
+     * @var string
+     */
     private $your_app_name;
 
     /**
@@ -118,6 +126,37 @@ abstract class Authenticator implements AuthenticatorInterface
         $this->password = $value;
 
         return $this;
+    }
+
+    /**
+     * @var bool
+     */
+    private $ssl_verify_peer = true;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSslVerifyPeer()
+    {
+        return $this->ssl_verify_peer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function &setSslVerifyPeer($value)
+    {
+        $this->ssl_verify_peer = (bool) $value;
+
+        return $this;
+    }
+
+    /**
+     * @return ConnectorInterface
+     */
+    protected function getConnector()
+    {
+        return (new Connector())->setSslVerifyPeer($this->getSslVerifyPeer());
     }
 
     /**

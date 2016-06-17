@@ -11,7 +11,7 @@ namespace ActiveCollab\SDK;
 /**
  * @package ActiveCollab\SDK
  */
-interface AuthenticatorInterface
+interface AuthenticatorInterface extends VerifySslPeerInterface
 {
     /**
      * @return string

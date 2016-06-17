@@ -9,7 +9,6 @@
 namespace ActiveCollab\SDK\Authenticator;
 
 use ActiveCollab\SDK\Authenticator;
-use ActiveCollab\SDK\Connector;
 use ActiveCollab\SDK\Exceptions\Authentication;
 use ActiveCollab\SDK\Exceptions\ListAccounts;
 use ActiveCollab\SDK\ResponseInterface;
@@ -115,7 +114,7 @@ class Cloud extends Authenticator
         if (empty($this->accounts[$account_id])) {
             throw new InvalidArgumentException("Account #{$account_id} not loaded");
         } else {
-            $response = (new Connector())->post('https://app.activecollab.com/' . $account_id . '/api/v1/issue-token-intent', null, [
+            $response = $this->getConnector()->post('https://app.activecollab.com/' . $account_id . '/api/v1/issue-token-intent', null, [
                 'client_vendor' => $this->getYourOrgName(),
                 'client_name' => $this->getYourAppName(),
                 'intent' => $intent,
@@ -142,7 +141,7 @@ class Cloud extends Authenticator
                 throw new Authentication('Email address and password are required');
             }
 
-            $response = (new Connector())->post('https://my.activecollab.com/api/v1/external/login', null, [
+            $response = $this->getConnector()->post('https://my.activecollab.com/api/v1/external/login', null, [
                 'email' => $this->getEmailAddress(),
                 'password' => $this->getPassword(),
             ]);

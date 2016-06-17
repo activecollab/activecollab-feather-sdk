@@ -9,7 +9,6 @@
 namespace ActiveCollab\SDK\Authenticator;
 
 use ActiveCollab\SDK\Authenticator;
-use ActiveCollab\SDK\Connector;
 use ActiveCollab\SDK\Exceptions\Authentication;
 use ActiveCollab\SDK\ResponseInterface;
 use InvalidArgumentException;
@@ -63,7 +62,7 @@ class SelfHosted extends Authenticator
      */
     public function issueToken(...$arguments)
     {
-        $response = (new Connector())->post("{$this->self_hosted_url}/api/v{$this->api_version}/issue-token", [], [
+        $response = $this->getConnector()->post("{$this->self_hosted_url}/api/v{$this->api_version}/issue-token", [], [
             'username' => $this->getEmailAddress(),
             'password' => $this->getPassword(),
             'client_name' => $this->getYourAppName(),

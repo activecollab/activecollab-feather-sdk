@@ -68,6 +68,26 @@ if ($token instanceof \ActiveCollab\SDK\TokenInterface) {
 }
 ```
 
+## SSL problems?
+
+If curl complains that SSL peer verification has failed, you can turn it off like this::
+
+```
+// Cloud
+$authenticator = new \ActiveCollab\SDK\Authenticator\Cloud('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', false);
+$authenticator->setSslVerifyPeer(false);
+
+// Self-hosted
+$authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/projects', false);
+$authenticator->setSslVerifyPeer(false);
+
+// Client
+$client = new \ActiveCollab\SDK\Client($token);
+$client->setSslVerifyPeer(false);
+```
+
+**Note:** Option to turn off SSL peer verification has been added in Active Collab SDK 3.1.
+
 ## Constructing a client instance
 
 Once we have our token, we can construct a client and make API calls:

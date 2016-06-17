@@ -17,6 +17,29 @@ use ActiveCollab\SDK\Exceptions\CallFailed;
 class Connector implements ConnectorInterface
 {
     /**
+     * @var bool
+     */
+    private $ssl_verify_peer = true;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSslVerifyPeer()
+    {
+        return $this->ssl_verify_peer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function &setSslVerifyPeer($value)
+    {
+        $this->ssl_verify_peer = (bool) $value;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getUserAgent()
@@ -149,6 +172,11 @@ class Connector implements ConnectorInterface
         curl_setopt($http, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($http, CURLINFO_HEADER_OUT, true);
         curl_setopt($http, CURLOPT_URL, $url);
+
+        if (!$this->getSslVerifyPeer()) {
+            curl_setopt($http, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($http, CURLOPT_SSL_VERIFYHOST, false);
+        }
 
         if (is_array($headers) && count($headers)) {
             curl_setopt($http, CURLOPT_HTTPHEADER, $headers);

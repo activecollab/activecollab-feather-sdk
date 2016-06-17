@@ -11,7 +11,7 @@ namespace ActiveCollab\SDK;
 /**
  * @package ActiveCollab\SDK
  */
-interface ConnectorInterface
+interface ConnectorInterface extends VerifySslPeerInterface
 {
     /**
      * Return user agent string.
