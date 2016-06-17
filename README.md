@@ -1,6 +1,6 @@
 # Active Collab 5 SDK
 
-This is a simple PHP library that makes communication with [Active Collab API](https://labs.activecollab.com/nightly-activecollab-api/v1/authentication.html) easy.
+This is a simple PHP library that makes communication with [Active Collab API](https://developers.activecollab.com/api-documentation/) easy.
 
 ## Installation
 
@@ -70,7 +70,7 @@ if ($token instanceof \ActiveCollab\SDK\TokenInterface) {
 
 ## SSL problems?
 
-If curl complains that SSL peer verification has failed, you can turn it off like this::
+If curl complains that SSL peer verification has failed, you can turn it off like this:
 
 ```php
 // Cloud
