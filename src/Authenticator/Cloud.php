@@ -164,7 +164,7 @@ class Cloud extends Authenticator
                         foreach ($result['accounts'] as $account) {
                             $this->all_accounts[] = $account;
 
-                            if ($account['class'] == 'FeatherApplicationInstance') {
+                            if ($account['class'] == 'FeatherApplicationInstance' || $account['class'] == 'ActiveCollab\Shepherd\Model\Account\ActiveCollab\FeatherAccount') {
                                 $account_id = (integer) $account['name'];
 
                                 $this->accounts[$account_id] = [
