@@ -11,7 +11,7 @@ namespace ActiveCollab\SDK;
 /**
  * @package ActiveCollab\SDK
  */
-interface ClientInterface
+interface ClientInterface extends VerifySslPeerInterface
 {
     const VERSION = '3.0.0';
 
