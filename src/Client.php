@@ -115,7 +115,7 @@ class Client implements ClientInterface
     public function &getConnector()
     {
         if (empty($this->connector)) {
-            $this->connector = new Connector();
+            $this->connector = (new Connector())->setSslVerifyPeer($this->getSslVerifyPeer());
         }
 
         return $this->connector;
@@ -225,5 +225,29 @@ class Client implements ClientInterface
         }
 
         return $file_params;
+    }
+
+
+    /**
+     * @var bool
+     */
+    private $ssl_verify_peer = true;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSslVerifyPeer()
+    {
+        return $this->ssl_verify_peer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function &setSslVerifyPeer($value)
+    {
+        $this->ssl_verify_peer = (bool) $value;
+
+        return $this;
     }
 }
