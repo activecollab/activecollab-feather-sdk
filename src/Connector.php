@@ -172,7 +172,6 @@ class Connector implements ConnectorInterface
     private function &getHandle($url, $headers)
     {
         $http = curl_init();
-        $headerero = array();
 
         curl_setopt($http, CURLOPT_USERAGENT, $this->getUserAgent());
         curl_setopt($http, CURLOPT_RETURNTRANSFER, true);
