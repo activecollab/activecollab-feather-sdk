@@ -33,6 +33,13 @@ interface ResponseInterface
      * @return string
      */
     public function getBody();
+    
+    /**
+     * Return response headers
+     *
+     * @return string
+     */
+    public function getHeaders();
 
     /**
      * Return true if response is JSON.
