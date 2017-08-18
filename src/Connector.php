@@ -96,10 +96,16 @@ class Connector implements ConnectorInterface
                     $mime_type = 'application/octet-stream';
                 }
 
-                $post_data['attachment_'.$counter++] = '@'.$path.';type='.$mime_type;
+                if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
+                    $post_data['attachment_' . $counter++] = new \CURLFile($path);
+                    curl_setopt($http, CURLOPT_SAFE_UPLOAD, true);
+                } else {
+                    $post_data['attachment_' . $counter++] = '@' . $path . ';type=' . $mime_type;
+                    curl_setopt($http, CURLOPT_SAFE_UPLOAD, false);
+                }
+                
             }
-
-            curl_setopt($http, CURLOPT_SAFE_UPLOAD, false); // PHP 5.6 compatibility for file uploads
+            
             curl_setopt($http, CURLOPT_POST, 1);
             curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
         } else {
