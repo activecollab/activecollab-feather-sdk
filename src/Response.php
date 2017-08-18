@@ -53,17 +53,23 @@ class Response implements ResponseInterface
      * @var string|null
      */
     private $raw_response;
-
+    
+    /**
+     * @var array()
+     */
+    private $response_headers;
+    
     /**
      * Construct a new response object.
      *
      * @param resource    $http
      * @param string|null $raw_response
      */
-    public function __construct(&$http, $raw_response)
+    public function __construct(&$http, $raw_response, $response_headers = array())
     {
         $this->info = curl_getinfo($http);
         $this->raw_response = $raw_response;
+        $this->response_headers = $response_headers;
     }
 
     /**
@@ -74,6 +80,16 @@ class Response implements ResponseInterface
     public function getBody()
     {
         return $this->raw_response;
+    }
+
+    /**
+     * Return response headers
+     *
+     * @return string
+     */
+    public function getHeaders()
+    {
+        return $this->response_headers;
     }
 
     /**

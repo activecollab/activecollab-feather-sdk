@@ -20,6 +20,11 @@ class Connector implements ConnectorInterface
      * @var bool
      */
     private $ssl_verify_peer = true;
+    
+    /**
+     * @var array()
+     */
+    private $response_headers;
 
     /**
      * {@inheritdoc}
@@ -91,10 +96,16 @@ class Connector implements ConnectorInterface
                     $mime_type = 'application/octet-stream';
                 }
 
-                $post_data['attachment_'.$counter++] = '@'.$path.';type='.$mime_type;
+                if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
+                    $post_data['attachment_' . $counter++] = new \CURLFile($path);
+                    curl_setopt($http, CURLOPT_SAFE_UPLOAD, true);
+                } else {
+                    $post_data['attachment_' . $counter++] = '@' . $path . ';type=' . $mime_type;
+                    curl_setopt($http, CURLOPT_SAFE_UPLOAD, false);
+                }
+                
             }
-
-            curl_setopt($http, CURLOPT_SAFE_UPLOAD, false); // PHP 5.6 compatibility for file uploads
+            
             curl_setopt($http, CURLOPT_POST, 1);
             curl_setopt($http, CURLOPT_POSTFIELDS, $post_data);
         } else {
@@ -181,8 +192,34 @@ class Connector implements ConnectorInterface
         if (is_array($headers) && count($headers)) {
             curl_setopt($http, CURLOPT_HTTPHEADER, $headers);
         }
+        
+        curl_setopt($http, CURLOPT_HEADERFUNCTION, $this->getHeaderFunction());
 
         return $http;
+    }
+
+    /**
+     * Returns function that captures the server's headers.
+     *
+     * @return function
+     */
+    private function getHeaderFunction(){
+        $this->response_headers = array();
+
+        return function($curl, $header) {
+            $len = strlen($header);
+            $header = explode(':', $header, 2);
+            if (count($header) < 2) // ignore invalid headers
+                return $len;
+
+            $name = strtolower(trim($header[0]));
+            if (!array_key_exists($name, $this->response_headers))
+                $this->response_headers[$name] = [trim($header[1])];
+            else
+                $this->response_headers[$name][] = trim($header[1]);
+
+            return $len;
+        };
     }
 
     /**
@@ -207,7 +244,7 @@ class Connector implements ConnectorInterface
 
             throw new CallFailed($error_code, $raw_response, null, $error_message);
         } else {
-            $response = new Response($http, $raw_response);
+            $response = new Response($http, $raw_response, $this->response_headers);
             curl_close($http);
 
             return $response;
