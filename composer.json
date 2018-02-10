@@ -2,13 +2,17 @@
     "name": "activecollab/activecollab-feather-sdk",
     "type": "library",
     "description": "This is a simple PHP library that makes communication with Active Collab API easy",
-    "keywords": ["activecollab", "api", "sdk"],
+    "keywords": [
+        "activecollab",
+        "api",
+        "sdk"
+    ],
     "homepage": "https://github.com/activecollab/activecollab-feather-sdk",
     "license": "MIT",
     "authors": [
         {
             "name": "Ilija Studen",
-            "email": "ilija.studen@gmail.com"
+            "email": "ilija.studen@activecollab.com"
         }
     ],
     "require": {
@@ -16,7 +20,7 @@
       "ext-curl" : "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "~1.0"
+        "friendsofphp/php-cs-fixer": "^2.0"
     },
     "autoload": {
         "psr-4": {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This library is free software, and it is part of the Active Collab SDK project. Check LICENSE for details.
+ * This library is free software, and it is part of the Active Collab TaskForm project. Check LICENSE for details.
  *
  * (c) A51 doo <info@activecollab.com>
  */
@@ -12,39 +12,50 @@ This library is free software, and it is part of the Active Collab SDK project. 
 (c) A51 doo <info@activecollab.com>
 EOF;
 
-Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
+$finder = (new PhpCsFixer\Finder())->in([__DIR__]);
 
-return (new Symfony\CS\Config\Config('psr2'))->fixers([
-    'header_comment',
-    'array_element_no_space_before_comma',
-    'array_element_white_space_after_comma',
-    'double_arrow_multiline_whitespaces',
-    'hash_to_slash_comment',
-    'include',
-    'join_function',
-    'multiline_array_trailing_comma',
-    'namespace_no_leading_whitespace',
-    'no_blank_lines_after_class_opening ',
-    'no_empty_lines_after_phpdocs',
-    'phpdoc_scalar',
-    'phpdoc_short_description',
-    'self_accessor',
-    'single_array_no_trailing_comma',
-    'single_blank_line_before_namespace',
-    'spaces_after_semicolon',
-    'spaces_before_semicolon',
-    'spaces_cast',
-    'standardize_not_equal',
-    'ternary_spaces',
-    'trim_array_spaces',
-    'unused_use ',
-    'whitespacy_lines',
-    'ordered_use',
-    'short_array_syntax',
-    'phpdoc_params',
-    '-phpdoc_separation',
-    '-phpdoc_no_package',
-    '-print_to_echo',
-    '-concat_without_spaces',
-    '-empty_return',
-])->finder((new Symfony\CS\Finder\DefaultFinder())->in([__DIR__ . '/src']));
+return (new PhpCsFixer\Config('psr2'))
+    ->setRules(
+        [
+            'header_comment' => [
+                'header' => $header,
+                'location' => 'after_open',
+            ],
+            'function_typehint_space' => true,
+            'method_argument_space' => true,
+            'no_trailing_whitespace' => true,
+            'no_whitespace_before_comma_in_array' => true,
+            'whitespace_after_comma_in_array' => true,
+            'no_multiline_whitespace_around_double_arrow' => true,
+            'hash_to_slash_comment' => true,
+            'include' => true,
+            'trailing_comma_in_multiline_array' => true,
+            'no_leading_namespace_whitespace' => true,
+            'no_blank_lines_after_phpdoc' => true,
+            'phpdoc_scalar' => true,
+            'phpdoc_summary' => true,
+            'self_accessor' => true,
+            'no_trailing_comma_in_singleline_array' => true,
+            'single_blank_line_before_namespace' => true,
+            'space_after_semicolon' => true,
+            'no_singleline_whitespace_before_semicolons' => true,
+            'cast_spaces' => true,
+            'standardize_not_equals' => true,
+            'ternary_operator_spaces' => true,
+            'trim_array_spaces' => true,
+            'no_unused_imports' => true,
+            'no_whitespace_in_blank_line' => true,
+            'ordered_imports' => true,
+            'array_syntax' => ['syntax' => 'short'],
+            'phpdoc_align' => true,
+            'return_type_declaration' => true,
+            'single_quote' => true,
+            'phpdoc_separation' => false,
+            'phpdoc_no_package' => false,
+            'no_mixed_echo_print' => false,
+            'concat_space' => false,
+            'simplified_null_return' => false,
+            'single_blank_line_at_eof' => true,
+        ]
+    )
+    ->setFinder($finder);
