@@ -146,39 +146,49 @@ class Cloud extends Authenticator
                 'password' => $this->getPassword(),
             ]);
 
-            if ($response instanceof ResponseInterface && $response->isJson()) {
-                $result = $response->getJson();
+            if ($response instanceof ResponseInterface) {
+                if ($response->isJson()) {
+                    $result = $response->getJson();
 
-                if (empty($result['is_ok'])) {
-                    if (empty($result['message'])) {
-                        throw new ListAccounts();
+                    if (empty($result['is_ok'])) {
+                        if (empty($result['message'])) {
+                            throw new ListAccounts();
+                        } else {
+                            throw new ListAccounts($result['message']);
+                        }
+                    } elseif (empty($result['user']) || empty($result['user']['intent'])) {
+                        throw new ListAccounts('Invalid response');
                     } else {
-                        throw new ListAccounts($result['message']);
-                    }
-                } elseif (empty($result['user']) || empty($result['user']['intent'])) {
-                    throw new ListAccounts('Invalid response');
-                } else {
-                    $this->accounts = $this->all_accounts = [];
+                        $this->accounts = $this->all_accounts = [];
 
-                    if (!empty($result['accounts']) && is_array($result['accounts'])) {
-                        foreach ($result['accounts'] as $account) {
-                            $this->all_accounts[] = $account;
+                        if (!empty($result['accounts']) && is_array($result['accounts'])) {
+                            foreach ($result['accounts'] as $account) {
+                                $this->all_accounts[] = $account;
 
-                            if ($account['class'] == 'FeatherApplicationInstance' || $account['class'] == 'ActiveCollab\Shepherd\Model\Account\ActiveCollab\FeatherAccount') {
-                                $account_id = (integer) $account['name'];
+                                if ($account['class'] == 'FeatherApplicationInstance' || $account['class'] == 'ActiveCollab\Shepherd\Model\Account\ActiveCollab\FeatherAccount') {
+                                    $account_id = (integer) $account['name'];
 
-                                $this->accounts[$account_id] = [
-                                    'id' => (integer) $account['name'],
-                                    'name' => $account['display_name'],
-                                    'url' => $account['url'],
-                                ];
+                                    $this->accounts[$account_id] = [
+                                        'id' => (integer) $account['name'],
+                                        'name' => $account['display_name'],
+                                        'url' => $account['url'],
+                                    ];
+                                }
                             }
                         }
-                    }
 
-                    $this->intent = $result['user']['intent'];
-                    unset($result['user']['intent']);
-                    $this->user = $result['user'];
+                        $this->intent = $result['user']['intent'];
+                        unset($result['user']['intent']);
+                        $this->user = $result['user'];
+                    }
+                } else {
+                    throw new Authentication(
+                        sprintf(
+                            'Invalid response. JSON expected, got "%s", status code "%s"',
+                            $response->getContentType(),
+                            $response->getHttpCode()
+                        )
+                    );
                 }
             } else {
                 throw new Authentication('Invalid response');

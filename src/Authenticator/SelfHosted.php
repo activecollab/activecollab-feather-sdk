@@ -69,8 +69,18 @@ class SelfHosted extends Authenticator
             'client_vendor' => $this->getYourOrgName(),
         ]);
 
-        if ($response instanceof ResponseInterface && $response->isJson()) {
-            return $this->issueTokenResponseToToken($response, $this->self_hosted_url);
+        if ($response instanceof ResponseInterface) {
+            if ($response->isJson()) {
+                return $this->issueTokenResponseToToken($response, $this->self_hosted_url);
+            } else {
+                throw new Authentication(
+                    sprintf(
+                        'Invalid response. JSON expected, got "%s", status code "%s"',
+                        $response->getContentType(),
+                        $response->getHttpCode()
+                    )
+                );
+            }
         } else {
             throw new Authentication('Invalid response');
         }
