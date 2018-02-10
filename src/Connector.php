@@ -9,6 +9,7 @@
 namespace ActiveCollab\SDK;
 
 use ActiveCollab\SDK\Exceptions\CallFailed;
+use CURLFile;
 
 /**
  * Connector makes requests and returns API responses.
@@ -86,6 +87,7 @@ class Connector implements ConnectorInterface
             }
 
             $counter = 1;
+            $safe_file_upload_turned_off = false;
 
             foreach ($files as $file) {
                 if (is_array($file)) {
@@ -95,7 +97,17 @@ class Connector implements ConnectorInterface
                     $mime_type = 'application/octet-stream';
                 }
 
-                $post_data['attachment_'.$counter++] = '@'.$path.';type='.$mime_type;
+                if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
+                    $post_data['attachment_' . $counter++] = new CURLFile($path);
+                    curl_setopt($http, CURLOPT_SAFE_UPLOAD, true);
+                } else {
+                    $post_data['attachment_' . $counter++] = '@' . $path . ';type=' . $mime_type;
+
+                    if (!$safe_file_upload_turned_off) {
+                        curl_setopt($http, CURLOPT_SAFE_UPLOAD, false);
+                        $safe_file_upload_turned_off = true;
+                    }
+                }
             }
 
             curl_setopt($http, CURLOPT_SAFE_UPLOAD, false); // PHP 5.6 compatibility for file uploads
