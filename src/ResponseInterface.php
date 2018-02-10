@@ -28,6 +28,13 @@ interface ResponseInterface
     public function getContentType();
 
     /**
+     * Return an array of response headers.
+     *
+     * @return array
+     */
+    public function getHeaders();
+
+    /**
      * Return raw response body.
      *
      * @return string

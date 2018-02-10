@@ -22,6 +22,11 @@ class Connector implements ConnectorInterface
     private $ssl_verify_peer = true;
 
     /**
+     * @var array
+     */
+    private $response_headers = [];
+
+    /**
      * {@inheritdoc}
      */
     public function getSslVerifyPeer()
@@ -161,7 +166,6 @@ class Connector implements ConnectorInterface
      *
      * @param string     $url
      * @param array|null $headers
-     *
      * @return resource
      */
     private function &getHandle($url, $headers)
@@ -182,6 +186,31 @@ class Connector implements ConnectorInterface
             curl_setopt($http, CURLOPT_HTTPHEADER, $headers);
         }
 
+        $this->response_headers = [];
+
+        curl_setopt(
+            $http,
+            CURLOPT_HEADERFUNCTION,
+            function($curl, $header) {
+                $len = strlen($header);
+                $header = explode(':', $header, 2);
+
+                if (count($header) < 2) {
+                    return $len;
+                }
+
+                $name = strtolower(trim($header[0]));
+
+                if (!array_key_exists($name, $this->response_headers)) {
+                    $this->response_headers[$name] = [trim($header[1])];
+                } else {
+                    $this->response_headers[$name][] = trim($header[1]);
+                }
+
+                return $len;
+            }
+        );
+
         return $http;
     }
 
@@ -189,11 +218,8 @@ class Connector implements ConnectorInterface
      * Do the call.
      *
      * @param resource $http
-     *
      * @return string
-     *
      * @throws CallFailed
-     * @throws AppException
      */
     private function execute(&$http)
     {
@@ -207,7 +233,7 @@ class Connector implements ConnectorInterface
 
             throw new CallFailed($error_code, $raw_response, null, $error_message);
         } else {
-            $response = new Response($http, $raw_response);
+            $response = new Response($http, $raw_response, $this->response_headers);
             curl_close($http);
 
             return $response;

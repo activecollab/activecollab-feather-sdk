@@ -55,15 +55,32 @@ class Response implements ResponseInterface
     private $raw_response;
 
     /**
+     * @var array
+     */
+    private $headers;
+
+    /**
      * Construct a new response object.
      *
      * @param resource    $http
      * @param string|null $raw_response
+     * @param array       $headers
      */
-    public function __construct(&$http, $raw_response)
+    public function __construct(&$http, $raw_response, $headers = [])
     {
         $this->info = curl_getinfo($http);
         $this->raw_response = $raw_response;
+        $this->headers = !empty($headers) && is_array($headers) ? $headers : [];
+    }
+
+    /**
+     * Return an array of response headers.
+     *
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 
     /**
