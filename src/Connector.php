@@ -8,7 +8,6 @@
 
 namespace ActiveCollab\SDK;
 
-use ActiveCollab\SDK\Exceptions\AppException;
 use ActiveCollab\SDK\Exceptions\CallFailed;
 
 /**
@@ -164,8 +163,8 @@ class Connector implements ConnectorInterface
     /**
      * Return curl resource.
      *
-     * @param string     $url
-     * @param array|null $headers
+     * @param  string     $url
+     * @param  array|null $headers
      * @return resource
      */
     private function &getHandle($url, $headers)
@@ -217,7 +216,7 @@ class Connector implements ConnectorInterface
     /**
      * Do the call.
      *
-     * @param resource $http
+     * @param  resource   $http
      * @return string
      * @throws CallFailed
      */
