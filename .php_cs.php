@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This library is free software, and it is part of the Active Collab TaskForm project. Check LICENSE for details.
+ * This library is free software, and it is part of the Active Collab SDK project. Check LICENSE for details.
  *
  * (c) A51 doo <info@activecollab.com>
  */
@@ -34,7 +34,7 @@ return (new PhpCsFixer\Config('psr2'))
             'no_blank_lines_after_phpdoc' => true,
             'phpdoc_scalar' => true,
             'phpdoc_summary' => true,
-            'self_accessor' => true,
+            'self_accessor' => false,
             'no_trailing_comma_in_singleline_array' => true,
             'single_blank_line_before_namespace' => true,
             'space_after_semicolon' => true,
