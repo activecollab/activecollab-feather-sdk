@@ -62,7 +62,9 @@ class SelfHosted extends Authenticator
      */
     public function issueToken(...$arguments)
     {
-        $response = $this->getConnector()->post("{$this->self_hosted_url}/api/v{$this->api_version}/issue-token", [], [
+        $request_url = "{$this->self_hosted_url}/api/v{$this->api_version}/issue-token";
+
+        $response = $this->getConnector()->post($request_url, [], [
             'username' => $this->getEmailAddress(),
             'password' => $this->getPassword(),
             'client_name' => $this->getYourAppName(),
@@ -75,7 +77,8 @@ class SelfHosted extends Authenticator
             } else {
                 throw new Authentication(
                     sprintf(
-                        'Invalid response. JSON expected, got "%s", status code "%s"',
+                        'Invalid response from "%s". JSON expected, got "%s", status code "%s"',
+                        $request_url,
                         $response->getContentType(),
                         $response->getHttpCode()
                     )
