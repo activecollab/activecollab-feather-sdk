@@ -53,7 +53,7 @@ if ($token instanceof \ActiveCollab\SDK\TokenInterface) {
 require_once '/path/to/vendor/autoload.php';
 
 // Provide name of your company, name of the app that you are developing, your email address and password. Last parameter is URL where your Active Collab is installed.
-$authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/projects');
+$authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/');
 
 // Issue a token.
 $token = $authenticator->issueToken();
@@ -78,7 +78,7 @@ $authenticator = new \ActiveCollab\SDK\Authenticator\Cloud('ACME Inc', 'My Aweso
 $authenticator->setSslVerifyPeer(false);
 
 // Self-hosted
-$authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/projects', false);
+$authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/', false);
 $authenticator->setSslVerifyPeer(false);
 
 // Client
