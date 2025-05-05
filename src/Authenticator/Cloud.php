@@ -141,7 +141,7 @@ class Cloud extends Authenticator
                 throw new Authentication('Email address and password are required');
             }
 
-            $response = $this->getConnector()->post('https://my.activecollab.com/api/v1/external/login', null, [
+            $response = $this->getConnector()->post('https://activecollab.com/api/v1/external/login', null, [
                 'email' => $this->getEmailAddress(),
                 'password' => $this->getPassword(),
             ]);
