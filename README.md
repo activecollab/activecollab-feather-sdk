@@ -1,6 +1,6 @@
 # PHP SDK for ActiveCollab 5 and 6 API
 
-This is a simple PHP library that makes communication with [Active Collab API](https://developers.activecollab.com/api-documentation/index.html) easy.
+This is a simple PHP library that makes communication with [ActiveCollab API](https://developers.activecollab.com/api-documentation/index.html) easy.
 
 ## Installation
 
@@ -16,9 +16,9 @@ If you choose to install this application with Composer instead of pulling down 
     
 Run a `composer update` to install the package.
 
-*Note*: If you used an older version of Active Collab API wrapper and loaded it using `dev-master`, lock it to version 2.0 by setting require statement to `^2.0` and calling `composer update`.
+*Note*: If you used an older version of ActiveCollab API wrapper and loaded it using `dev-master`, lock it to version 2.0 by setting require statement to `^2.0` and calling `composer update`.
 
-## Connecting to Active Collab Cloud Accounts
+## Connecting to ActiveCollab Cloud Accounts
 
 ```php
 <?php
@@ -28,7 +28,7 @@ require_once '/path/to/vendor/autoload.php';
 // Provide name of your company, name of the app that you are developing, your email address and password.
 $authenticator = new \ActiveCollab\SDK\Authenticator\Cloud('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember');
 
-// Show all Active Collab 5 and up account that this user has access to.
+// Show all ActiveCollab 5 and up account that this user has access to.
 print_r($authenticator->getAccounts());
 
 // Show user details (first name, last name and avatar URL).
@@ -47,12 +47,12 @@ if ($token instanceof \ActiveCollab\SDK\TokenInterface) {
 }
 ```
 
-## Connecting to Self-Hosted Active Collab Accounts
+## Connecting to Self-Hosted ActiveCollab Accounts
 
 ```php
 require_once '/path/to/vendor/autoload.php';
 
-// Provide name of your company, name of the app that you are developing, your email address and password. Last parameter is URL where your Active Collab is installed.
+// Provide name of your company, name of the app that you are developing, your email address and password. Last parameter is URL where your ActiveCollab is installed.
 $authenticator = new \ActiveCollab\SDK\Authenticator\SelfHosted('ACME Inc', 'My Awesome Application', 'you@acmeinc.com', 'hard to guess, easy to remember', 'https://my.company.com/projects');
 
 // Issue a token.
@@ -86,7 +86,7 @@ $client = new \ActiveCollab\SDK\Client($token);
 $client->setSslVerifyPeer(false);
 ```
 
-**Note:** Option to turn off SSL peer verification has been added in Active Collab SDK 3.1.
+**Note:** Option to turn off SSL peer verification has been added in ActiveCollab SDK 3.1.
 
 ## Constructing a client instance
 
@@ -147,4 +147,4 @@ try {
 
 ``delete()`` method only requires ``command`` argument to be provided.
 
-For full list of available API command, please check [Active Collab API documentation](https://developers.activecollab.com/api-documentation/index.html).
+For full list of available API command, please check [ActiveCollab API documentation](https://developers.activecollab.com/api-documentation/index.html).
