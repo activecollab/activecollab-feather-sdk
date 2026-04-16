@@ -162,17 +162,15 @@ abstract class Authenticator implements AuthenticatorInterface
     /**
      * @param  ResponseInterface $response
      * @param  string            $url
-     * @return Token
-     * @throws Authentication
      */
-    protected function issueTokenResponseToToken(ResponseInterface $response, $url)
+    protected function issueTokenResponseToToken(ResponseInterface $response, $url): Token
     {
         $result = $response->getJson();
 
         if (empty($result['is_ok']) || empty($result['token'])) {
             throw new Authentication('Authentication rejected');
-        } else {
-            return new Token($result['token'], $url);
         }
+
+        return new Token($result['token'], $url);
     }
 }

@@ -21,11 +21,18 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.0"
+        "ext-readline": "*",
+        "friendsofphp/php-cs-fixer": "^2.0",
+        "phpunit/phpunit": "^9.6"
     },
     "autoload": {
         "psr-4": {
             "ActiveCollab\\SDK\\" : "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ActiveCollab\\SDK\\Test\\": "test/src"
         }
     },
     "config": {
