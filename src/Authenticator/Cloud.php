@@ -95,24 +95,41 @@ class Cloud extends Authenticator
         $account_id = (integer) $arguments[0];
 
         if (empty($this->accounts[$account_id])) {
-            throw new InvalidArgumentException("Account #{$account_id} not loaded");
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Account #%d not loaded",
+                    $account_id,
+                ),
+            );
         }
 
         if (empty($this->accounts[$account_id]['intent'])) {
-            throw new InvalidArgumentException("No intent available for account #{$account_id}");
+            throw new InvalidArgumentException(
+                sprintf(
+                    "No intent available for account #%d",
+                    $account_id,
+                ),
+            );
         }
 
-        $response = $this->getConnector()->post('https://app.activecollab.com/' . $account_id . '/api/v1/issue-token-intent', null, [
-            'client_vendor' => $this->getYourOrgName(),
-            'client_name' => $this->getYourAppName(),
-            'intent' => $this->accounts[$account_id]['intent'],
-        ]);
+        $response = $this->getConnector()->post(
+            sprintf(
+                'https://app.activecollab.com/%d/api/v1/issue-token-intent',
+                $account_id,
+            ),
+            null,
+            [
+                'client_vendor' => $this->getYourOrgName(),
+                'client_name' => $this->getYourAppName(),
+                'intent' => $this->accounts[$account_id]['intent'],
+            ],
+        );
 
         if ($response instanceof ResponseInterface && $response->isJson()) {
             return $this->issueTokenResponseToToken($response, $this->accounts[$account_id]['url']);
-        } else {
-            throw new Authentication('Invalid response');
         }
+
+        throw new Authentication('Invalid response');
     }
 
     /**
