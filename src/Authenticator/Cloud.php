@@ -69,7 +69,7 @@ class Cloud extends Authenticator
     private $user;
 
     /**
-     * Return user information (first name, last name and avatar URL).
+     * Return user information (first name, last name, and avatar URL).
      *
      * @return array
      */
