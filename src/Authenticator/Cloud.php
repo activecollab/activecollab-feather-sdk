@@ -114,7 +114,7 @@ class Cloud extends Authenticator
 
         $response = $this->getConnector()->post(
             sprintf(
-                'https://app.activecollab.com/%d/api/v1/issue-token-intent',
+                'https://app.activecollab.com/%d/api/v1/issue-token',
                 $account_id,
             ),
             null,
