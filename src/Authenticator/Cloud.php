@@ -11,6 +11,7 @@ namespace ActiveCollab\SDK\Authenticator;
 use ActiveCollab\SDK\Authenticator;
 use ActiveCollab\SDK\Exceptions\Authentication;
 use ActiveCollab\SDK\Exceptions\ListAccounts;
+use ActiveCollab\SDK\Exceptions\TwoFactorAuthRequired;
 use ActiveCollab\SDK\ResponseInterface;
 use InvalidArgumentException;
 
@@ -68,7 +69,7 @@ class Cloud extends Authenticator
     private $user;
 
     /**
-     * Return user information (first name, last name and avatar URL).
+     * Return user information (first name, last name, and avatar URL).
      *
      * @return array
      */
@@ -81,51 +82,85 @@ class Cloud extends Authenticator
         return $this->user;
     }
 
-    /**
-     * @var string
-     */
-    private $intent;
-
-    /**
-     * @return string
-     */
-    private function getIntent()
-    {
-        if (!$this->accounts_and_user_loaded) {
-            $this->loadAccountsAndUser();
-        }
-
-        return $this->intent;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function issueToken(...$arguments)
     {
         if (empty($arguments[0]) || !is_int($arguments[0])) {
             throw new InvalidArgumentException('Account ID is required');
         }
 
-        $intent = $this->getIntent();
+        if (!$this->accounts_and_user_loaded) {
+            $this->loadAccountsAndUser();
+        }
 
         $account_id = (integer) $arguments[0];
 
         if (empty($this->accounts[$account_id])) {
-            throw new InvalidArgumentException("Account #{$account_id} not loaded");
-        } else {
-            $response = $this->getConnector()->post('https://app.activecollab.com/' . $account_id . '/api/v1/issue-token-intent', null, [
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Account #%d not loaded",
+                    $account_id,
+                ),
+            );
+        }
+
+        if (empty($this->accounts[$account_id]['intent'])) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "No intent available for account #%d",
+                    $account_id,
+                ),
+            );
+        }
+
+        $response = $this->getConnector()->post(
+            sprintf(
+                'https://app.activecollab.com/%d/api/v1/issue-token',
+                $account_id,
+            ),
+            null,
+            [
                 'client_vendor' => $this->getYourOrgName(),
                 'client_name' => $this->getYourAppName(),
-                'intent' => $intent,
-            ]);
+                'intent' => $this->accounts[$account_id]['intent'],
+            ],
+        );
 
-            if ($response instanceof ResponseInterface && $response->isJson()) {
-                return $this->issueTokenResponseToToken($response, $this->accounts[$account_id]['url']);
-            } else {
-                throw new Authentication('Invalid response');
-            }
+        if ($response instanceof ResponseInterface && $response->isJson()) {
+            return $this->issueTokenResponseToToken($response, $this->accounts[$account_id]['url']);
         }
+
+        throw new Authentication('Invalid response');
+    }
+
+    /**
+     * Complete two-factor authentication with the code received by the user.
+     *
+     * Call this after catching TwoFactorAuthRequired from getAccounts(), getUser(),
+     * or any method that triggers loadAccountsAndUser().
+     *
+     * @param  string $intent_id  The intent ID from the TwoFactorAuthRequired exception
+     * @param  string $code       The 2FA code (from email or authenticator app)
+     * @return $this
+     */
+    public function completeTwoFactorAuth(string $intent_id, string $code): self
+    {
+        $response = $this->getConnector()->post(
+            'https://activecollab.com/api/v1/external/login',
+            null,
+            [
+                'intent_id' => $intent_id,
+                'code' => $code,
+            ]
+        );
+
+        if ($response instanceof ResponseInterface && $response->isJson()) {
+            $result = $response->getJson();
+            $this->parseLoginResponse($result);
+        } else {
+            throw new Authentication('Invalid response');
+        }
+
+        return $this;
     }
 
     /**
@@ -150,37 +185,11 @@ class Cloud extends Authenticator
                 if ($response->isJson()) {
                     $result = $response->getJson();
 
-                    if (empty($result['is_ok'])) {
-                        if (empty($result['message'])) {
-                            throw new ListAccounts();
-                        } else {
-                            throw new ListAccounts($result['message']);
-                        }
-                    } elseif (empty($result['user']) || empty($result['user']['intent'])) {
-                        throw new ListAccounts('Invalid response');
-                    } else {
-                        $this->accounts = $this->all_accounts = [];
-
-                        if (!empty($result['accounts']) && is_array($result['accounts'])) {
-                            foreach ($result['accounts'] as $account) {
-                                $this->all_accounts[] = $account;
-
-                                if ($account['class'] == 'FeatherApplicationInstance' || $account['class'] == 'ActiveCollab\Shepherd\Model\Account\ActiveCollab\FeatherAccount') {
-                                    $account_id = (integer) $account['name'];
-
-                                    $this->accounts[$account_id] = [
-                                        'id' => (integer) $account['name'],
-                                        'name' => $account['display_name'],
-                                        'url' => $account['url'],
-                                    ];
-                                }
-                            }
-                        }
-
-                        $this->intent = $result['user']['intent'];
-                        unset($result['user']['intent']);
-                        $this->user = $result['user'];
+                    if (!empty($result['intent_id']) && empty($result['is_ok'])) {
+                        throw new TwoFactorAuthRequired($result['intent_id']);
                     }
+
+                    $this->parseLoginResponse($result);
                 } else {
                     throw new Authentication(
                         sprintf(
@@ -194,5 +203,43 @@ class Cloud extends Authenticator
                 throw new Authentication('Invalid response');
             }
         }
+    }
+
+    /**
+     * Parse login response and populate accounts and user.
+     *
+     * @param  array $result  Decoded JSON response from Shepherd login endpoint
+     */
+    private function parseLoginResponse(array $result): void
+    {
+        if (empty($result['is_ok'])) {
+            throw new ListAccounts($result['message'] ?? null);
+        }
+
+        if (empty($result['user'])) {
+            throw new ListAccounts('Invalid response');
+        }
+
+        $this->accounts = $this->all_accounts = [];
+
+        if (!empty($result['accounts']) && is_array($result['accounts'])) {
+            foreach ($result['accounts'] as $account) {
+                $this->all_accounts[] = $account;
+
+                if ($account['class'] == 'FeatherApplicationInstance' || $account['class'] == 'ActiveCollab\Shepherd\Model\Account\ActiveCollab\FeatherAccount') {
+                    $account_id = (integer) $account['name'];
+
+                    $this->accounts[$account_id] = [
+                        'id' => (integer) $account['name'],
+                        'name' => $account['display_name'],
+                        'url' => $account['url'],
+                        'intent' => $account['intent'] ?? null,
+                    ];
+                }
+            }
+        }
+
+        $this->user = $result['user'];
+        $this->accounts_and_user_loaded = true;
     }
 }
