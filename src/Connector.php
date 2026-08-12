@@ -240,12 +240,9 @@ class Connector implements ConnectorInterface
             $error_code = curl_errno($http);
             $error_message = curl_error($http);
 
-            curl_close($http);
-
             throw new CallFailed($error_code, $raw_response, null, $error_message);
         } else {
             $response = new Response($http, $raw_response, $this->response_headers);
-            curl_close($http);
 
             return $response;
         }
